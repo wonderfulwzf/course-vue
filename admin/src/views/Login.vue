@@ -7,10 +7,10 @@
             <div class="center">
               <h1>
                 <i class="ace-icon fa fa-leaf green"></i>
-                <span class="red">To Have</span>
-                <span class="white" id="id-text2">Video</span>
+                <span class="orange">To Have  </span>
+                <span class="orange" id="id-text2">Video</span>
               </h1>
-              <h4 class="blue" id="id-company-text">王智芳</h4>
+              <h4 class="blue" id="id-company-text">欢迎登录</h4>
             </div>
 
             <div class="space-6"></div>
