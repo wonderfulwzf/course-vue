@@ -558,6 +558,18 @@ export default {
     $("body").removeClass("login-layout light-login");
     $("body").attr("class", "no-skin");
   },
+  //监听
+  watch: {
+    $route: {
+      handler: function(){
+        let _this = this;
+        _this.$nextTick(function(){
+          _this.activeSidebar(_this.$route.name.replace("/","-")+"-sidebar");
+        })
+      }
+    }
+  },
+  //初始化渲染页面
   methods:{
     //菜单激活
     activeSidebar: function(id){
@@ -571,7 +583,7 @@ export default {
         parentLi.siblings().removeClass("active open");
         parentLi.addClass("active open");
       }
-    }
+    } 
   }
 };
 </script>

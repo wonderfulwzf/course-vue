@@ -1216,7 +1216,7 @@
 export default {
   name: "chapter",
   mounted: function(){
-    this.$parent.activeSidebar("business-chapter-sidebar");
+   
   },
 };
 </script>
