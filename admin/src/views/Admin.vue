@@ -555,8 +555,10 @@
 <script>
 export default {
   mounted: function() {
+    let _this = this;
     $("body").removeClass("login-layout light-login");
     $("body").attr("class", "no-skin");
+    _this.activeSidebar(_this.$route.name.replace("/","-")+"-sidebar");
   },
   //监听
   watch: {
