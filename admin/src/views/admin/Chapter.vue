@@ -115,11 +115,17 @@ export default {
     //大章列表
     list() {
         let _this = this;
-        _this.$ajax.get("http://127.0.0.1:9000/business/admin/chapter/list").then(
+        _this.$ajax.post("http://127.0.0.1:9000/business/admin/chapter/list",
+        //传参对象
+        {
+            pageSize:1,
+           currentPage:1
+        }).then(
+            
             //响应结果
             (response)=>{
                 console.log("查询大章列表",response);
-                _this.chapters = response.data;
+                _this.chapters = response.data.records;
             }
         )
     }
