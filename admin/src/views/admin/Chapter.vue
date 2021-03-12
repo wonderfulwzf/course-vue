@@ -11,10 +11,10 @@
     </thead>
 
     <tbody>
-       <tr>
-            <td>1</td>
-            <td>1</td>
-            <td>1</td>
+       <tr v-for="chapter in chapters" v-bind:key="chapter.id">
+            <td>{{chapter.id}}</td>
+            <td>{{chapter.name}}</td>
+            <td>{{chapter.courseId}}</td>
             <td>
                 <div class="hidden-sm hidden-xs btn-group">
                 <button class="btn btn-xs btn-success">
@@ -101,6 +101,12 @@
 <script>
 export default {
   name: "chapter",
+  //返回值
+  data: function(){
+    return{
+        chapters:[]
+    }  
+  },
   mounted: function(){
     let _this = this;
     _this.list();
@@ -113,6 +119,7 @@ export default {
             //响应结果
             (response)=>{
                 console.log("查询大章列表",response);
+                _this.chapters = response.data;
             }
         )
     }
