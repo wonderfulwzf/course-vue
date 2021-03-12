@@ -126,7 +126,7 @@ export default {
           "http://127.0.0.1:9000/business/admin/chapter/list",
           //传参对象
           {
-            pageSize: 1,
+            pageSize: 10,
             currentPage: 1,
           }
         )
