@@ -256,6 +256,8 @@ export default {
               //刷新列表
               _this.list(1);
               ToastMin.success("保存成功！");
+            }else{
+              ToastMax.warning(resp.message);
             }
           }
         );
