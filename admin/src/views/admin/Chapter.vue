@@ -36,7 +36,7 @@
                 <i class="ace-icon fa fa-pencil bigger-120"></i>
               </button>
               <!-- 删除 -->
-              <button class="btn btn-xs btn-danger">
+              <button class="btn btn-xs btn-danger" @click="del(chapter.id)">
                 <i class="ace-icon fa fa-trash-o bigger-120"></i>
               </button>
             </div>
@@ -63,9 +63,7 @@
             <!-- 新增表单 -->
             <form class="form-horizontal">
               <div class="form-group">
-                <label  class="col-sm-2 control-label"
-                  >名称</label
-                >
+                <label class="col-sm-2 control-label">名称</label>
                 <div class="col-sm-10">
                   <input
                     type="text"
@@ -76,9 +74,7 @@
                 </div>
               </div>
               <div class="form-group">
-                <label  class="col-sm-2 control-label"
-                  >课程ID</label
-                >
+                <label class="col-sm-2 control-label">课程ID</label>
                 <div class="col-sm-10">
                   <input
                     type="text"
@@ -94,13 +90,20 @@
             <button type="button" class="btn btn-default" data-dismiss="modal">
               取消
             </button>
-            <button type="button" class="btn btn-primary" v-on:click="save()">保存</button>
+            <button type="button" class="btn btn-primary" v-on:click="save()">
+              保存
+            </button>
           </div>
         </div>
       </div>
     </div>
     <!-- 编辑模态框 -->
-    <div id="chapter-update-model" class="modal fade" tabindex="-1" role="dialog">
+    <div
+      id="chapter-update-model"
+      class="modal fade"
+      tabindex="-1"
+      role="dialog"
+    >
       <div class="modal-dialog" role="document">
         <div class="modal-content">
           <div class="modal-header">
@@ -118,9 +121,7 @@
             <!-- 修改表单 -->
             <form class="form-horizontal">
               <div class="form-group">
-                <label  class="col-sm-2 control-label"
-                  >ID</label
-                >
+                <label class="col-sm-2 control-label">ID</label>
                 <div class="col-sm-10">
                   <input
                     type="text"
@@ -131,9 +132,7 @@
                 </div>
               </div>
               <div class="form-group">
-                <label  class="col-sm-2 control-label"
-                  >名称</label
-                >
+                <label class="col-sm-2 control-label">名称</label>
                 <div class="col-sm-10">
                   <input
                     type="text"
@@ -144,9 +143,7 @@
                 </div>
               </div>
               <div class="form-group">
-                <label  class="col-sm-2 control-label"
-                  >课程ID</label
-                >
+                <label class="col-sm-2 control-label">课程ID</label>
                 <div class="col-sm-10">
                   <input
                     type="text"
@@ -162,7 +159,9 @@
             <button type="button" class="btn btn-default" data-dismiss="modal">
               取消
             </button>
-            <button type="button" class="btn btn-primary" v-on:click="update()">保存</button>
+            <button type="button" class="btn btn-primary" v-on:click="update()">
+              保存
+            </button>
           </div>
         </div>
       </div>
@@ -172,14 +171,14 @@
 </template>
 
 <script>
-import Pagination from '../../components/Pagination.vue';
+import Pagination from "../../components/Pagination.vue";
 export default {
- components: { Pagination },
+  components: { Pagination },
   name: "chapter",
   //返回值
   data: function() {
     return {
-      chapter:{},
+      chapter: {},
       chapters: [],
     };
   },
@@ -200,7 +199,7 @@ export default {
     toupdate(chapter) {
       let _this = this;
       //消除双向绑定，复制对象
-      _this.chapter = $.extend({},chapter);
+      _this.chapter = $.extend({}, chapter);
       $("#chapter-update-model").modal("show");
     },
     //大章列表
@@ -221,7 +220,7 @@ export default {
             console.log("查询大章列表", response);
             let resp = response.data;
             _this.chapters = resp.data.records;
-            _this.$refs.pagination.render(page,resp.data.totalRecord);
+            _this.$refs.pagination.render(page, resp.data.totalRecord);
           }
         );
     },
@@ -232,7 +231,7 @@ export default {
         .post(
           "http://127.0.0.1:9000/business/admin/chapter/save",
           //传参对象
-            _this.chapter
+          _this.chapter
         )
         .then(
           //响应结果
@@ -240,7 +239,7 @@ export default {
             console.log("保存大章成功", response);
             let resp = response.data;
             //保存成功
-            if(resp.success){
+            if (resp.success) {
               //关闭模态框
               $("#chapter-add-model").modal("hide");
               //刷新列表
@@ -256,7 +255,7 @@ export default {
         .post(
           "http://127.0.0.1:9000/business/admin/chapter/update",
           //传参对象
-            _this.chapter
+          _this.chapter
         )
         .then(
           //响应结果
@@ -264,7 +263,7 @@ export default {
             console.log("修改大章成功", response);
             let resp = response.data;
             //保存成功
-            if(resp.success){
+            if (resp.success) {
               //关闭模态框
               $("#chapter-update-model").modal("hide");
               //刷新列表
@@ -272,6 +271,42 @@ export default {
             }
           }
         );
+    },
+    //大章修改
+    del(id) {
+      let _this = this;
+      //弹出层
+      Swal.fire({
+        title: "确认删除?",
+        text: "删除后将不可恢复！",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "确认",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          //确认删除
+          _this.$ajax
+            .delete("http://127.0.0.1:9000/business/admin/chapter/delete/" + id)
+            .then(
+              //响应结果
+              (response) => {
+                console.log("删除大章成功", response);
+                let resp = response.data;
+                //保存成功
+                if (resp.success) {
+                  //刷新列表
+                  _this.list(1);
+                  Swal.fire(
+                    "删除成功",
+                    "秒删！"
+                  );
+                }
+              }
+            );
+        }
+      });
     },
   },
 };
