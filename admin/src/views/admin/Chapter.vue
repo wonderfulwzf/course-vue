@@ -2,7 +2,7 @@
   <div>
     <p>
       <!-- 新增按钮 -->
-      <button class="btn btn-white btn-default btn-round" @click="add()">
+      <button class="btn btn-white btn-default btn-round" @click="toadd()">
         <i class="ace-icon fa fa-edit"></i>新 增
       </button>
       &nbsp;
@@ -31,85 +31,21 @@
           <td>{{ chapter.courseId }}</td>
           <td>
             <div class="hidden-sm hidden-xs btn-group">
-              <button class="btn btn-xs btn-success">
-                <i class="ace-icon fa fa-check bigger-120"></i>
-              </button>
-
-              <button class="btn btn-xs btn-info">
+              <!-- 编辑 -->
+              <button class="btn btn-xs btn-info" @click="toupdate(chapter)">
                 <i class="ace-icon fa fa-pencil bigger-120"></i>
               </button>
-
+              <!-- 删除 -->
               <button class="btn btn-xs btn-danger">
                 <i class="ace-icon fa fa-trash-o bigger-120"></i>
               </button>
-
-              <button class="btn btn-xs btn-warning">
-                <i class="ace-icon fa fa-flag bigger-120"></i>
-              </button>
-            </div>
-
-            <div class="hidden-md hidden-lg">
-              <div class="inline pos-rel">
-                <button
-                  class="btn btn-minier btn-primary dropdown-toggle"
-                  data-toggle="dropdown"
-                  data-position="auto"
-                >
-                  <i class="ace-icon fa fa-cog icon-only bigger-110"></i>
-                </button>
-
-                <ul
-                  class="dropdown-menu dropdown-only-icon dropdown-yellow dropdown-menu-right dropdown-caret dropdown-close"
-                >
-                  <li>
-                    <a
-                      href="#"
-                      class="tooltip-info"
-                      data-rel="tooltip"
-                      title="View"
-                    >
-                      <span class="blue">
-                        <i class="ace-icon fa fa-search-plus bigger-120"></i>
-                      </span>
-                    </a>
-                  </li>
-
-                  <li>
-                    <a
-                      href="#"
-                      class="tooltip-success"
-                      data-rel="tooltip"
-                      title="Edit"
-                    >
-                      <span class="green">
-                        <i
-                          class="ace-icon fa fa-pencil-square-o bigger-120"
-                        ></i>
-                      </span>
-                    </a>
-                  </li>
-
-                  <li>
-                    <a
-                      href="#"
-                      class="tooltip-error"
-                      data-rel="tooltip"
-                      title="Delete"
-                    >
-                      <span class="red">
-                        <i class="ace-icon fa fa-trash-o bigger-120"></i>
-                      </span>
-                    </a>
-                  </li>
-                </ul>
-              </div>
             </div>
           </td>
         </tr>
       </tbody>
     </table>
-    <!-- 模态框 -->
-    <div class="modal fade" tabindex="-1" role="dialog">
+    <!-- 新增模态框 -->
+    <div id="chapter-add-model" class="modal fade" tabindex="-1" role="dialog">
       <div class="modal-dialog" role="document">
         <div class="modal-content">
           <div class="modal-header">
@@ -163,6 +99,74 @@
         </div>
       </div>
     </div>
+    <!-- 编辑模态框 -->
+    <div id="chapter-update-model" class="modal fade" tabindex="-1" role="dialog">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button
+              type="button"
+              class="close"
+              data-dismiss="modal"
+              aria-label="Close"
+            >
+              <span aria-hidden="true">&times;</span>
+            </button>
+            <h4 class="modal-title">表单</h4>
+          </div>
+          <div class="modal-body">
+            <!-- 修改表单 -->
+            <form class="form-horizontal">
+              <div class="form-group">
+                <label  class="col-sm-2 control-label"
+                  >ID</label
+                >
+                <div class="col-sm-10">
+                  <input
+                    type="text"
+                    class="form-control"
+                    placeholder="id"
+                    v-model="chapter.id"
+                  />
+                </div>
+              </div>
+              <div class="form-group">
+                <label  class="col-sm-2 control-label"
+                  >名称</label
+                >
+                <div class="col-sm-10">
+                  <input
+                    type="text"
+                    class="form-control"
+                    placeholder="名称"
+                    v-model="chapter.name"
+                  />
+                </div>
+              </div>
+              <div class="form-group">
+                <label  class="col-sm-2 control-label"
+                  >课程ID</label
+                >
+                <div class="col-sm-10">
+                  <input
+                    type="text"
+                    class="form-control"
+                    placeholder="课程ID"
+                    v-model="chapter.courseId"
+                  />
+                </div>
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">
+              取消
+            </button>
+            <button type="button" class="btn btn-primary" v-on:click="update()">保存</button>
+          </div>
+        </div>
+      </div>
+    </div>
     <!-- /.modal -->
   </div>
 </template>
@@ -186,9 +190,18 @@ export default {
   },
   methods: {
     //添加大章打开模态框
-    add() {
-      //let _this = this;
-      $(".modal").modal("show");
+    toadd() {
+      let _this = this;
+      _this.chapter = {};
+      $("#chapter-add-model").modal("show");
+    },
+    //
+    //添加大章打开模态框
+    toupdate(chapter) {
+      let _this = this;
+      //消除双向绑定，复制对象
+      _this.chapter = $.extend({},chapter);
+      $("#chapter-update-model").modal("show");
     },
     //大章列表
     list(page) {
@@ -229,7 +242,31 @@ export default {
             //保存成功
             if(resp.success){
               //关闭模态框
-              $(".modal").modal("hide");
+              $("#chapter-add-model").modal("hide");
+              //刷新列表
+              _this.list(1);
+            }
+          }
+        );
+    },
+    //大章修改
+    update() {
+      let _this = this;
+      _this.$ajax
+        .post(
+          "http://127.0.0.1:9000/business/admin/chapter/update",
+          //传参对象
+            _this.chapter
+        )
+        .then(
+          //响应结果
+          (response) => {
+            console.log("修改大章成功", response);
+            let resp = response.data;
+            //保存成功
+            if(resp.success){
+              //关闭模态框
+              $("#chapter-update-model").modal("hide");
               //刷新列表
               _this.list(1);
             }
