@@ -224,7 +224,7 @@ export default {
           }
         );
     },
-    //大章save
+    //大章保存
     save() {
       let _this = this;
       _this.$ajax
@@ -244,6 +244,7 @@ export default {
               $("#chapter-add-model").modal("hide");
               //刷新列表
               _this.list(1);
+              toast.success("保存成功！");
             }
           }
         );
@@ -268,11 +269,12 @@ export default {
               $("#chapter-update-model").modal("hide");
               //刷新列表
               _this.list(1);
+              toast.success("保存成功！");
             }
           }
         );
     },
-    //大章修改
+    //大章删除
     del(id) {
       let _this = this;
       //弹出层
@@ -284,6 +286,7 @@ export default {
         confirmButtonColor: "#3085d6",
         cancelButtonColor: "#d33",
         confirmButtonText: "确认",
+        cancelButtonText: "返回",
       }).then((result) => {
         if (result.isConfirmed) {
           //确认删除
