@@ -10,7 +10,7 @@ const Toast = Swal.mixin({
   },
 });
 
-//toast类
+//toastmin类
 ToastMin = {
   //成功执行的弱弹窗
   success: function(message) {
@@ -32,3 +32,35 @@ ToastMin = {
       });
   }
 };
+//toastmax类
+ToastMax = {
+    success: function (message) {
+      Swal.fire({
+        position: 'top-end',
+        icon: 'success',
+        title: message,
+        showConfirmButton: false,
+        timer: 3000
+      })
+    },
+  
+    error: function (message) {
+      Swal.fire({
+        position: 'top-end',
+        icon: 'error',
+        title: message,
+        showConfirmButton: false,
+        timer: 3000
+      })
+    },
+  
+    warning: function (message) {
+      Swal.fire({
+        position: 'top-center',
+        icon: 'warning',
+        title: message,
+        showConfirmButton: false,
+        timer: 3000
+      })
+    }
+  };
