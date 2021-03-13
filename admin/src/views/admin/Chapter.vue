@@ -205,6 +205,7 @@ export default {
     //大章列表
     list(page) {
       let _this = this;
+      Loading.show();
       _this.$ajax
         .post(
           "http://127.0.0.1:9000/business/admin/chapter/list",
@@ -217,6 +218,7 @@ export default {
         .then(
           //响应结果
           (response) => {
+            Loading.hide();
             console.log("查询大章列表", response);
             let resp = response.data;
             _this.chapters = resp.data.records;
@@ -244,7 +246,7 @@ export default {
               $("#chapter-add-model").modal("hide");
               //刷新列表
               _this.list(1);
-              toast.success("保存成功！");
+              ToastMin.success("保存成功！");
             }
           }
         );
@@ -269,7 +271,7 @@ export default {
               $("#chapter-update-model").modal("hide");
               //刷新列表
               _this.list(1);
-              toast.success("保存成功！");
+              ToastMin.success("保存成功！");
             }
           }
         );
@@ -277,38 +279,24 @@ export default {
     //大章删除
     del(id) {
       let _this = this;
-      //弹出层
-      Swal.fire({
-        title: "确认删除?",
-        text: "删除后将不可恢复！",
-        icon: "warning",
-        showCancelButton: true,
-        confirmButtonColor: "#3085d6",
-        cancelButtonColor: "#d33",
-        confirmButtonText: "确认",
-        cancelButtonText: "返回",
-      }).then((result) => {
-        if (result.isConfirmed) {
-          //确认删除
-          _this.$ajax
-            .delete("http://127.0.0.1:9000/business/admin/chapter/delete/" + id)
-            .then(
-              //响应结果
-              (response) => {
-                console.log("删除大章成功", response);
-                let resp = response.data;
-                //保存成功
-                if (resp.success) {
-                  //刷新列表
-                  _this.list(1);
-                  Swal.fire(
-                    "删除成功",
-                    "秒删！"
-                  );
-                }
+
+      Confirm.show("删除大章后将不可恢复！", function() {
+        //确认删除
+        _this.$ajax
+          .delete("http://127.0.0.1:9000/business/admin/chapter/delete/" + id)
+          .then(
+            //响应结果
+            (response) => {
+              console.log("删除大章成功", response);
+              let resp = response.data;
+              //保存成功
+              if (resp.success) {
+                //刷新列表
+                _this.list(1);
+                ToastMin.success("删除成功！");
               }
-            );
-        }
+            }
+          );
       });
     },
   },

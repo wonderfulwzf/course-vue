@@ -11,7 +11,7 @@ const Toast = Swal.mixin({
 });
 
 //toast类
-toast = {
+ToastMin = {
   //成功执行的弱弹窗
   success: function(message) {
     Toast.fire({
