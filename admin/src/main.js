@@ -24,3 +24,6 @@ new Vue({
   router,
   render: h => h(App),
 }).$mount('#app')
+
+//打印环境信息
+console.log("环境",process.env.NODE_ENV)

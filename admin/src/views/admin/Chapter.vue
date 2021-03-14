@@ -208,7 +208,7 @@ export default {
       Loading.show();
       _this.$ajax
         .post(
-          "http://127.0.0.1:9000/business/admin/chapter/list",
+          process.env.VUE_APP_SERVER+"/business/admin/chapter/list",
           //传参对象
           {
             pageSize: _this.$refs.pagination.size,
@@ -240,7 +240,7 @@ export default {
 
       _this.$ajax
         .post(
-          "http://127.0.0.1:9000/business/admin/chapter/save",
+          process.env.VUE_APP_SERVER+"/business/admin/chapter/save",
           //传参对象
           _this.chapter
         )
@@ -267,7 +267,7 @@ export default {
       let _this = this;
       _this.$ajax
         .post(
-          "http://127.0.0.1:9000/business/admin/chapter/update",
+          process.env.VUE_APP_SERVER+"/business/admin/chapter/update",
           //传参对象
           _this.chapter
         )
@@ -294,7 +294,7 @@ export default {
       Confirm.show("删除大章后将不可恢复！", function() {
         //确认删除
         _this.$ajax
-          .delete("http://127.0.0.1:9000/business/admin/chapter/delete/" + id)
+          .delete(process.env.VUE_APP_SERVER+"/business/admin/chapter/delete/" + id)
           .then(
             //响应结果
             (response) => {
