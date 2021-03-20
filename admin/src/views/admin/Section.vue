@@ -39,7 +39,7 @@
                     <td>{{section.chapterId}}</td>
                     <td>{{section.video}}</td>
                     <td>{{section.time}}</td>
-                    <td>{{section.charge}}</td>
+                    <td>{{CHARGE|optionKV(section.charge)}}</td>
                     <td>{{section.sort}}</td>
                     <td>{{section.createdAt}}</td>
                     <td>{{section.updatedAt}}</td>
@@ -146,20 +146,11 @@
                                     <div class="form-group">
                                         <label class="col-sm-2 control-label">收费:C收费F免费</label>
                                         <div class="col-sm-10">
-                                        <input
-                                                type="text"
-                                                class="form-control"
-                                                placeholder="收费:C收费F免费"
-                                                v-model="section.charge"
-                                        />
+                                        <select v-model="section.charge" class="form-control">
+                                              <option v-for="o in CHARGE" v-bind:key="o" v-bind:value="o.value">{{o.value}}</option>
+                                        </select>
                                         </div>
-                                     </div>
-                                    <div class="form-group">
-                                     </div>
-                                    <div class="form-group">
-                                     </div>
-                                    <div class="form-group">
-                                     </div>
+                                    </div>
 
                         </form>
                     </div>
@@ -257,19 +248,10 @@
                                 <div class="form-group">
                                       <label class="col-sm-2 control-label">收费:C收费F免费</label>
                                       <div class="col-sm-10">
-                                          <input
-                                                  type="text"
-                                                  class="form-control"
-                                                  placeholder="收费:C收费F免费"
-                                                  v-model="section.charge"
-                                          />
+                                          <select v-model="section.charge" class="form-control">
+                                              <option v-for="o in CHARGE" v-bind:key="o" v-bind:value="o.key">{{o.value}}</option>
+                                          </select>
                                       </div>
-                                </div>
-                                <div class="form-group">
-                                </div>
-                                <div class="form-group">
-                                </div>
-                                <div class="form-group">
                                 </div>
                         </form>
                     </div>
@@ -298,6 +280,7 @@
             return {
                 section: {},
                 sections: [],
+                CHARGE: [{key:"C",value:"收费"},{key:"F",value:"免费"}],
             };
         },
         mounted: function() {
