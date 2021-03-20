@@ -44,6 +44,10 @@
        <button class="btn btn-xs btn-danger" @click="del(chapter.id)">
         <i class="ace-icon fa fa-trash-o bigger-120"></i>
        </button>
+         <!-- 去小节页面 -->
+       <button class="btn btn-xs btn-warning" @click="toSection(chapter)">
+        <i class="ace-icon fa fa-arrow-right icon-on-right">小节</i>
+       </button>
       </div>
      </td>
     </tr>
@@ -326,6 +330,12 @@ export default {
   toCourse() {
    let _this = this;
    _this.$router.push("/business/course");
+  },
+  //大章跳转到小节
+  toSection(chapter) {
+   let _this = this;
+    SessionStorage.set("chapter",chapter);
+    _this.$router.push("/business/section");
   },
  },
 };
