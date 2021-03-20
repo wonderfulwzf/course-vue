@@ -10,7 +10,8 @@ Validator = {
 
   length: function (value, text, min, max) {
     if (Tool.isEmpty(value)) {
-      return true;
+      ToastMax.warning(text + "不能为空");
+      return false;
     }
     if (!Tool.isLength(value, min, max)) {
       ToastMax.warning(text + "长度" + min + "~" + max + "位");
