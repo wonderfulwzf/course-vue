@@ -313,7 +313,7 @@
                         //传参对象
                         {
                             pageSize: _this.$refs.pagination.size,
-                            currentPage: page,
+                            pageNo: page,
                         }
                     )
                     .then(

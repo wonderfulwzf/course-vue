@@ -448,7 +448,7 @@
             </ul>
           </li>
           <!-- 业务管理 -->
-          <li class="active open">
+          <li class="">
             <a href="#" class="dropdown-toggle">
               <i class="menu-icon fa fa-list"></i>
               <span class="menu-text"> 业务管理 </span>
@@ -460,7 +460,7 @@
 
             <ul class="submenu">
               <!-- 大章 -->
-              <li class="active" id = "business-chapter-sidebar">
+              <li class="" id = "business-chapter-sidebar">
                 <!-- 跳转 -->
                 <router-link to="/business/chapter">
                   <i class="menu-icon fa fa-caret-right"></i>
@@ -469,7 +469,7 @@
                 <b class="arrow"></b>
               </li>
               <!-- 小节 -->
-              <li class="business-section-sidebar">
+              <li id="business-section-sidebar">
                 <router-link to="/business/section">
                   <i class="menu-icon fa fa-caret-right"></i>
                   小节管理
@@ -477,7 +477,7 @@
                 <b class="arrow"></b>
               </li>
               <!-- 课程 -->
-              <li class="business-course-sidebar">
+              <li id="business-course-sidebar">
                 <router-link to="/business/course">
                   <i class="menu-icon fa fa-caret-right"></i>
                   课程管理
@@ -590,6 +590,7 @@ export default {
       let parentLi = $("#" + id).parents("li");
       if(parentLi){
         parentLi.siblings().removeClass("active open");
+        parentLi.siblings().find("li").removeClass("active");
         parentLi.addClass("active open");
       }
     } 

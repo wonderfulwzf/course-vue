@@ -66,62 +66,15 @@
        <button class="btn btn-xs btn-danger" @click="del(course.id)">
         <i class="ace-icon fa fa-trash-o bigger-120"></i>
        </button>
+       <!-- 去大章页面 -->
+       <button class="btn btn-xs btn-warning" @click="toChapter(course)">
+        <i class="ace-icon fa fa-arrow-right icon-on-right">大章</i>
+       </button>
       </p>
      </div>
     </div>
    </div>
   </div>
-  <!-- 表格 -->
-  <!-- <table id="simple-table" class="table table-bordered table-hover">
-   <thead>
-    <tr>
-     <th>id</th>
-     <th>名称</th>
-     <th>概述</th>
-     <th>时长</th>
-     <th>价格(元)</th>
-     <th>封面</th>
-     <th>级别</th>
-     <th>收费</th>
-     <th>状态</th>
-     <th>报名数</th>
-     <th>顺序</th>
-     <th>创建时间</th>
-     <th>修改时间</th>
-     <th class="hidden-480">操作</th>
-    </tr>
-   </thead>
-
-   <tbody>
-    <tr v-for="course in courses" v-bind:key="course.id">
-     <td>{{ course.id }}</td>
-     <td>{{ course.name }}</td>
-     <td>{{ course.sunmary }}</td>
-     <td>{{ course.time }}</td>
-     <td>{{ course.price }}</td>
-     <td>{{ course.image }}</td>
-     <td>{{ COURSE_LEVEL | optionKV(course.level) }}</td>
-     <td>{{ COURSE_CHARGE | optionKV(course.charge) }}</td>
-     <td>{{ COURSE_STATUS | optionKV(course.status) }}</td>
-     <td>{{ course.enroll }}</td>
-     <td>{{ course.sort }}</td>
-     <td>{{ course.createdAt }}</td>
-     <td>{{ course.updatedAt }}</td>
-     <td>
-      <div class="hidden-sm hidden-xs btn-group">
- 
-       <button class="btn btn-xs btn-info" @click="toupdate(course)">
-        <i class="ace-icon fa fa-pencil bigger-120"></i>
-       </button>
-
-       <button class="btn btn-xs btn-danger" @click="del(course.id)">
-        <i class="ace-icon fa fa-trash-o bigger-120"></i>
-       </button>
-      </div>
-     </td>
-    </tr>
-   </tbody>
-  </table> -->
   <!-- 新增模态框 -->
   <div id="course-add-model" class="modal fade" tabindex="-1" role="dialog">
    <div class="modal-dialog" role="document">
@@ -468,7 +421,7 @@ export default {
      //传参对象
      {
       pageSize: _this.$refs.pagination.size,
-      currentPage: page,
+      pageNo: page,
      }
     )
     .then(
@@ -568,6 +521,13 @@ export default {
      );
    });
   },
+  //课程跳转到大章
+  toChapter(course) {
+   let _this = this;
+    SessionStorage.set("course",course);
+    _this.$router.push("/business/chapter");
+  },
+
  },
 };
 </script>
