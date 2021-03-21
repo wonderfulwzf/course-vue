@@ -30,7 +30,7 @@
        v-for="category in level1"
        v-bind:key="category.id"
        v-on:click="onClickLevel1(category)"
-       v-bind:class="{'active': category.id === active.id}"
+       v-bind:class="{ active: category.id === active.id }"
       >
        <td>{{ category.id }}</td>
        <td>{{ category.parent }}</td>
@@ -52,7 +52,7 @@
      </tbody>
     </table>
    </div>
-      <div class="col-md-6">
+   <div class="col-md-6">
     <!-- 表格 -->
     <table id="simple-table" class="table table-bordered table-hover">
      <thead>
@@ -66,10 +66,7 @@
      </thead>
 
      <tbody>
-      <tr
-       v-for="category in level2"
-       v-bind:key="category.id"
-      >
+      <tr v-for="category in level2" v-bind:key="category.id">
        <td>{{ category.id }}</td>
        <td>{{ category.parent }}</td>
        <td>{{ category.name }}</td>
@@ -109,17 +106,6 @@
      <div class="modal-body">
       <!-- 新增表单 -->
       <form class="form-horizontal">
-       <div class="form-group">
-        <label class="col-sm-2 control-label">id</label>
-        <div class="col-sm-10">
-         <input
-          type="text"
-          class="form-control"
-          placeholder="id"
-          v-model="category.id"
-         />
-        </div>
-       </div>
        <div class="form-group">
         <label class="col-sm-2 control-label">父id</label>
         <div class="col-sm-10">
@@ -250,7 +236,7 @@ export default {
    categorys: [],
    level1: [],
    level2: [],
-   active: {}
+   active: {},
   };
  },
  mounted: function () {
@@ -303,6 +289,12 @@ export default {
         }
        }
       }
+      _this.level2 = [];
+      // 对当前一级分类中选中的表格触发一次点击事件，以刷新二级菜单列表
+      // 注意：界面的渲染需要等vue绑定好变量后才做，所以加延时100ms
+      setTimeout(function () {
+       $("tr.active").trigger("click");
+      }, 100);
      }
     );
   },
@@ -402,8 +394,8 @@ export default {
 };
 </script>
 <style scoped>
-  .active td {
-    background-color: #fce5cd !important;
-  }
+.active td {
+ background-color: #fce5cd !important;
+}
 </style>
 
