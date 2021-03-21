@@ -52,7 +52,7 @@
       <p>{{ course.sunmary }}</p>
       
       <p>
-         <span class="badge badge-info">时长：{{ course.time }}</span>
+         <span class="badge badge-info">时长：{{ course.time | formatSecond}}</span>
          <span class="badge badge-info">报名数：{{ course.enroll }}</span>
          <span class="badge badge-info">价格：{{ course.price }}￥</span>
       </p>

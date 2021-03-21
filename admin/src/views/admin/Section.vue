@@ -48,7 +48,7 @@
      <td>{{ section.courseId }}</td>
      <td>{{ section.chapterId }}</td>
      <td>{{ section.video }}</td>
-     <td>{{ section.time }}</td>
+     <td>{{ section.time | formatSecond }}</td>
      <td>{{ CHARGE | optionKV(section.charge) }}</td>
      <td>{{ section.sort }}</td>
      <td>{{ section.createdAt }}</td>
@@ -302,8 +302,8 @@ export default {
  mounted: function () {
   let _this = this;
   _this.$refs.pagination.size = 5;
-  let course = SessionStorage.get("course",course);
-  let chapter = SessionStorage.get("chapter",chapter);
+  let course = SessionStorage.get("course",course)||{};
+  let chapter = SessionStorage.get("chapter",chapter)||{};
   if(Tool.isEmpty(course)||Tool.isEmpty(chapter)){
       _this.$router.push("/welcome");
   }
