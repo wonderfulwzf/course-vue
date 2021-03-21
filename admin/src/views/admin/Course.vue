@@ -396,6 +396,7 @@ export default {
    COURSE_LEVEL: COURSE_LEVEL,
    COURSE_STATUS: COURSE_STATUS,
    categorys: [],
+   tree: {},
   };
  },
  mounted: function () {
@@ -418,6 +419,7 @@ export default {
    let _this = this;
    //消除双向绑定，复制对象
    _this.course = $.extend({}, course);
+   _this.listCategory(course.id);
    $("#course-update-model").modal("show");
   },
   //列表
@@ -457,6 +459,13 @@ export default {
    ) {
     return;
    }
+   let treemessage = _this.tree.getCheckedNodes();
+   if(Tool.isEmpty(treemessage)){
+     Toast.warning("请选择分类！");
+     return;
+   }
+   console.log(treemessage);
+   _this.course.categorys = treemessage;
    Loading.show();
    _this.$ajax
     .post(
@@ -485,6 +494,13 @@ export default {
   //修改
   update() {
    let _this = this;
+   let treemessage = _this.tree.getCheckedNodes();
+   if(Tool.isEmpty(treemessage)){
+     Toast.warning("请选择分类！");
+     return;
+   }
+   console.log(treemessage);
+   _this.course.categorys = treemessage;
    _this.$ajax
     .post(
      process.env.VUE_APP_SERVER + "/business/admin/course/update",
@@ -571,8 +587,28 @@ export default {
 			}
 		};
     var zNodes = _this.categorys;
-    $.fn.zTree.init($(".ztree"), setting, zNodes);
-  }
+    _this.tree = $.fn.zTree.init($(".ztree"), setting, zNodes);
+    //默认展开所有节点
+    _this.tree.expandAll(true);
+  },
+  listCategory(courseId) {
+        let _this = this;
+        Loading.show();
+        _this.$ajax.post(process.env.VUE_APP_SERVER + '/business/admin/course/category/list/' + courseId).then((res)=>{
+          Loading.hide();
+          console.log("查找课程下所有分类结果：", res);
+          let response = res.data;
+          console.log(response);
+          let ca = response.data;
+          console.log(ca);
+          // 勾选查询到的分类
+          _this.tree.checkAllNodes(false);
+          for (let i = 0; i < ca.length; i++) {
+            let node = _this.tree.getNodeByParam("id", ca[i].categoryId);
+            _this.tree.checkNode(node, true);
+          }
+        })
+      },
  },
 };
 </script>
