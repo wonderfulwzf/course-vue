@@ -302,8 +302,8 @@ export default {
  mounted: function () {
   let _this = this;
   _this.$refs.pagination.size = 5;
-  let course = SessionStorage.get("course",course)||{};
-  let chapter = SessionStorage.get("chapter",chapter)||{};
+  let course = SessionStorage.get(SESSION_KEY_COURSE,course)||{};
+  let chapter = SessionStorage.get(SESSION_KEY_CHAPTER,chapter)||{};
   if(Tool.isEmpty(course)||Tool.isEmpty(chapter)){
       _this.$router.push("/welcome");
   }

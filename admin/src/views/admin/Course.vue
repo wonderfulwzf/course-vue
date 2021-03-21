@@ -46,17 +46,20 @@
        </td>
       </div>
 
-      <h3 class="search-title">
-       <a href="#" class="blue">{{ course.name }}</a>
+      <h3 class="search-title" @click="toChapter(course)">
+       <a class="blue">{{ course.name }}</a>
       </h3>
       <p>{{ course.sunmary }}</p>
-      
+
       <p>
-         <span class="badge badge-info">时长：{{ course.time | formatSecond}}</span>
-         <span class="badge badge-info">报名数：{{ course.enroll }}</span>
-         <span class="badge badge-info">价格：{{ course.price }}￥</span>
+       <span class="badge badge-info"
+        >时长：{{ course.time | formatSecond }}</span
+       >
+       <span class="badge badge-info">报名数：{{ course.enroll }}</span>
+       <span class="badge badge-info">价格：{{ course.price }}￥</span>
+       <span class="badge badge-info">顺序：{{ course.sort }}</span>
       </p>
-     
+
       <p>
        <!-- 编辑 -->
        <button class="btn btn-xs btn-info" @click="toupdate(course)">
@@ -65,6 +68,10 @@
        <!-- 删除 -->
        <button class="btn btn-xs btn-danger" @click="del(course.id)">
         <i class="ace-icon fa fa-trash-o bigger-120"></i>
+       </button>
+       <!-- 去排序页面 -->
+       <button class="btn btn-xs btn-warning" @click="openSortInput(course)">
+        <i class="ace-icon fa fa-arrow-right icon-on-right">排序</i>
        </button>
        <!-- 去大章页面 -->
        <button class="btn btn-xs btn-warning" @click="toChapter(course)">
@@ -88,7 +95,7 @@
       >
        <span aria-hidden="true">&times;</span>
       </button>
-      <h4 class="modal-title">表单</h4>
+      <h4 class="modal-title">新增</h4>
      </div>
      <div class="modal-body">
       <!-- 新增表单 -->
@@ -96,10 +103,10 @@
        <div class="form-group">
         <label class="col-sm-2 control-label">分类</label>
         <div class="col-sm-10">
-          <!-- ztree -->
-          <div class="col-sm-10">
-            <ul id="tree" class="ztree"></ul>
-          </div>
+         <!-- ztree -->
+         <div class="col-sm-10">
+          <ul id="tree" class="ztree"></ul>
+         </div>
         </div>
        </div>
        <div class="form-group">
@@ -107,6 +114,7 @@
         <div class="col-sm-10">
          <input
           type="text"
+          maxlength="6"
           class="form-control"
           placeholder="名称"
           v-model="course.name"
@@ -211,9 +219,18 @@
          />
         </div>
        </div>
-       <div class="form-group"></div>
-       <div class="form-group"></div>
-       <div class="form-group"></div>
+       <div class="form-group">
+        <label class="col-sm-2 control-label">排序</label>
+        <div class="col-sm-10">
+         <input
+          type="text"
+          readonly
+          class="form-control"
+          placeholder="排序"
+          v-model="course.sort"
+         />
+        </div>
+       </div>
       </form>
      </div>
      <div class="modal-footer">
@@ -240,18 +257,18 @@
       >
        <span aria-hidden="true">&times;</span>
       </button>
-      <h4 class="modal-title">表单</h4>
+      <h4 class="modal-title">编辑</h4>
      </div>
      <div class="modal-body">
       <!-- 修改表单 -->
       <form class="form-horizontal">
-        <div class="form-group">
+       <div class="form-group">
         <label class="col-sm-2 control-label">分类</label>
         <div class="col-sm-10">
-          <!-- ztree -->
-          <div class="col-sm-10">
-            <ul  class="ztree"></ul>
-          </div>
+         <!-- ztree -->
+         <div class="col-sm-10">
+          <ul class="ztree"></ul>
+         </div>
         </div>
        </div>
        <div class="form-group">
@@ -378,6 +395,60 @@
     </div>
    </div>
   </div>
+  <!-- 排序模态框 -->
+  <div id="course-sort-model" class="modal fade" tabindex="-1" role="dialog">
+   <div class="modal-dialog" role="document">
+    <div class="modal-content">
+     <div class="modal-header">
+      <button
+       type="button"
+       class="close"
+       data-dismiss="modal"
+       aria-label="Close"
+      >
+       <span aria-hidden="true">&times;</span>
+      </button>
+      <h4 class="modal-title">排序</h4>
+     </div>
+     <div class="modal-body">
+      <!-- 修改表单 -->
+      <form class="form-horizontal">
+       <div class="form-group">
+        <label class="col-sm-2 control-label">新排序</label>
+        <div class="col-sm-10">
+         <input
+          type="text"
+          class="form-control"
+          placeholder="新排序"
+          v-model="sort.newSort"
+         />
+        </div>
+       </div>
+       <div class="form-group">
+        <label class="col-sm-2 control-label">当前排序</label>
+        <div class="col-sm-10">
+         <input
+          type="text"
+          v-model="sort.oldSort"
+          readonly
+          class="form-control"
+          placeholder="当前排序"
+         />
+        </div>
+       </div>
+      </form>
+     </div>
+     <div class="modal-footer">
+      <button type="button" class="btn btn-default" data-dismiss="modal">
+       取消
+      </button>
+      <button type="button" class="btn btn-primary" v-on:click="updateSort()">
+       保存
+      </button>
+     </div>
+    </div>
+   </div>
+  </div>
   <!-- /.modal -->
  </div>
 </template>
@@ -397,6 +468,12 @@ export default {
    COURSE_STATUS: COURSE_STATUS,
    categorys: [],
    tree: {},
+   //排序
+   sort: {
+    id: "",
+    oldSort: 0,
+    newSort: 0,
+   },
   };
  },
  mounted: function () {
@@ -404,13 +481,14 @@ export default {
   _this.$refs.pagination.size = 5;
   _this.allCategory();
   _this.list(1);
- 
  },
  methods: {
   //添加打开模态框
   toadd() {
    let _this = this;
-   _this.course = {};
+   _this.course = {
+    sort: _this.$refs.pagination.total + 1,
+   };
    $("#course-add-model").modal("show");
   },
   //
@@ -460,9 +538,9 @@ export default {
     return;
    }
    let treemessage = _this.tree.getCheckedNodes();
-   if(Tool.isEmpty(treemessage)){
-     Toast.warning("请选择分类！");
-     return;
+   if (Tool.isEmpty(treemessage)) {
+    Toast.warning("请选择分类！");
+    return;
    }
    console.log(treemessage);
    _this.course.categorys = treemessage;
@@ -495,9 +573,9 @@ export default {
   update() {
    let _this = this;
    let treemessage = _this.tree.getCheckedNodes();
-   if(Tool.isEmpty(treemessage)){
-     Toast.warning("请选择分类！");
-     return;
+   if (Tool.isEmpty(treemessage)) {
+    Toast.warning("请选择分类！");
+    return;
    }
    console.log(treemessage);
    _this.course.categorys = treemessage;
@@ -549,8 +627,8 @@ export default {
   //课程跳转到大章
   toChapter(course) {
    let _this = this;
-    SessionStorage.set("course",course);
-    _this.$router.push("/business/chapter");
+   SessionStorage.set(SESSION_KEY_COURSE, course);
+   _this.$router.push("/business/chapter");
   },
   //种类列表
   allCategory() {
@@ -570,45 +648,88 @@ export default {
     );
   },
   //初始化树
-  initTree(){
-    let _this = this;
-    var setting = {
-			check: {
-				enable: true
-			},
-			data: {
-				simpleData: {
-          //对于数据库字段
-          idKey: "id",
-          pIdKey: "parent",
-          rootPId:"00000000",
-					enable: true
-				}
-			}
-		};
-    var zNodes = _this.categorys;
-    _this.tree = $.fn.zTree.init($(".ztree"), setting, zNodes);
-    //默认展开所有节点
-    _this.tree.expandAll(true);
+  initTree() {
+   let _this = this;
+   var setting = {
+    check: {
+     enable: true,
+    },
+    data: {
+     simpleData: {
+      //对于数据库字段
+      idKey: "id",
+      pIdKey: "parent",
+      rootPId: "00000000",
+      enable: true,
+     },
+    },
+   };
+   var zNodes = _this.categorys;
+   _this.tree = $.fn.zTree.init($(".ztree"), setting, zNodes);
+   //默认展开所有节点
+   _this.tree.expandAll(true);
   },
   listCategory(courseId) {
-        let _this = this;
-        Loading.show();
-        _this.$ajax.post(process.env.VUE_APP_SERVER + '/business/admin/course/category/list/' + courseId).then((res)=>{
-          Loading.hide();
-          console.log("查找课程下所有分类结果：", res);
-          let response = res.data;
-          console.log(response);
-          let ca = response.data;
-          console.log(ca);
-          // 勾选查询到的分类
-          _this.tree.checkAllNodes(false);
-          for (let i = 0; i < ca.length; i++) {
-            let node = _this.tree.getNodeByParam("id", ca[i].categoryId);
-            _this.tree.checkNode(node, true);
-          }
-        })
-      },
+   let _this = this;
+   Loading.show();
+   _this.$ajax
+    .post(
+     process.env.VUE_APP_SERVER +
+      "/business/admin/course/category/list/" +
+      courseId
+    )
+    .then((res) => {
+     Loading.hide();
+     console.log("查找课程下所有分类结果：", res);
+     let response = res.data;
+     console.log(response);
+     let ca = response.data;
+     console.log(ca);
+     // 勾选查询到的分类
+     _this.tree.checkAllNodes(false);
+     for (let i = 0; i < ca.length; i++) {
+      let node = _this.tree.getNodeByParam("id", ca[i].categoryId);
+      _this.tree.checkNode(node, true);
+     }
+    });
+  },
+  //打开排序模态框
+  openSortInput(course) {
+   let _this = this;
+   _this.sort = {
+    id: course.id,
+    oldSort: course.sort,
+    newSort: course.sort,
+   };
+   $("#course-sort-model").modal("show");
+  },
+  /**
+   * 排序
+   */
+  updateSort() {
+   let _this = this;
+   if (_this.sort.newSort === _this.sort.oldSort) {
+    ToastMin.warning("排序没有变化");
+    return;
+   }
+   Loading.show();
+   _this.$ajax
+    .post(
+     process.env.VUE_APP_SERVER + "/business/admin/course/sort",
+     _this.sort
+    )
+    .then((res) => {
+     let response = res.data;
+
+     if (response.success) {
+      ToastMin.success("更新排序成功");
+      $("#course-sort-model").modal("hide");
+      _this.list(1);
+     } else {
+      ToastMin.error("更新排序失败");
+     }
+    });
+  },
  },
 };
 </script>
