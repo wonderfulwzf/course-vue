@@ -428,6 +428,15 @@
             <b class="arrow"></b>
 
             <ul class="submenu">
+              <!-- 分类 -->
+              <li id="business-category-sidebar">
+                <router-link to="/business/category">
+                  <i class="menu-icon fa fa-caret-right"></i>
+                  分类管理
+                </router-link>
+                <b class="arrow"></b>
+              </li>
+
               <li class="">
                 <a href="tables.html">
                   <i class="menu-icon fa fa-caret-right"></i>
@@ -436,7 +445,6 @@
 
                 <b class="arrow"></b>
               </li>
-
               <li class="">
                 <a href="jqgrid.html">
                   <i class="menu-icon fa fa-caret-right"></i>
