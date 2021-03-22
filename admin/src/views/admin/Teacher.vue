@@ -134,10 +134,11 @@
         <label class="col-sm-2 control-label">头像</label>
         <div class="col-sm-10">
          <input
-          type="text"
-          class="form-control"
+         id="qqq"
+          type="file"
+          class="form-control file-upload-input"
           placeholder="头像"
-          v-model="teacher.image"
+          v-on:change="uploadImage()"
          />
         </div>
        </div>
@@ -232,10 +233,10 @@
         <label class="col-sm-2 control-label">头像</label>
         <div class="col-sm-10">
          <input
-          type="text"
-          class="form-control"
+          type="file"
+          class="form-control file-upload-input"
           placeholder="头像"
-          v-model="teacher.image"
+          v-on:change="uploadImage()"
          />
         </div>
        </div>
@@ -437,6 +438,32 @@ export default {
      );
    });
   },
+  //文件上传
+  uploadImage() {
+   let _this = this;
+   //传输表单.file-upload-input
+   let formData = new window.FormData();
+   formData.append("file",document.querySelector("#qqq").files[0]);
+   Loading.show();
+    //确认删除
+    _this.$ajax
+     .post(
+      process.env.VUE_APP_SERVER + "/file/admin/upload",formData
+     )
+     .then(
+      //响应结果
+      (response) => {
+        Loading.hide();
+       let resp = response.data;
+       //保存成功
+       if (resp.success) {
+        //刷新列表
+        ToastMin.success("上传文件成功！");
+       }
+      }
+     );
+  },
+
  },
 };
 </script>
