@@ -48,6 +48,29 @@
       <h3 class="search-title" @click="toChapter(course)">
        <a class="blue">{{ course.name }}</a>
       </h3>
+      <div
+       v-bind:key="teacher.id"
+       v-for="teacher in teachers.filter((t) => {
+        return t.id === course.teacherId;
+       })"
+       class="profile-activity clearfix"
+      >
+       <div>
+        <img
+         v-show="!teacher.image"
+         class="pull-left"
+         src="/ace/assets/images/avatars/avatar5.png"
+        />
+        <img
+         v-show="teacher.image"
+         class="pull-left"
+         v-bind:src="teacher.image"
+        />
+        <a class="user" href="#"> {{ teacher.name }} </a>
+        <br />
+        {{ teacher.position }}
+       </div>
+      </div>
       <p>{{ course.sunmary }}</p>
 
       <p>
@@ -296,7 +319,7 @@
          />
         </div>
        </div>
-      <!-- 讲师 -->
+       <!-- 讲师 -->
        <div class="form-group">
         <label class="col-sm-2 control-label">讲师</label>
         <div class="col-sm-10">
