@@ -45,7 +45,6 @@
         }}</span>
        </td>
       </div>
-
       <h3 class="search-title" @click="toChapter(course)">
        <a class="blue">{{ course.name }}</a>
       </h3>
@@ -119,6 +118,21 @@
           placeholder="名称"
           v-model="course.name"
          />
+        </div>
+       </div>
+       <!-- 讲师 -->
+       <div class="form-group">
+        <label class="col-sm-2 control-label">讲师</label>
+        <div class="col-sm-10">
+         <select v-model="course.teacherId" class="form-control">
+          <option
+           v-for="(o, index) in teachers"
+           v-bind:key="index"
+           v-bind:value="o.id"
+          >
+           {{ o.name }}
+          </option>
+         </select>
         </div>
        </div>
        <div class="form-group">
@@ -280,6 +294,21 @@
           placeholder="名称"
           v-model="course.name"
          />
+        </div>
+       </div>
+      <!-- 讲师 -->
+       <div class="form-group">
+        <label class="col-sm-2 control-label">讲师</label>
+        <div class="col-sm-10">
+         <select v-model="course.teacherId" class="form-control">
+          <option
+           v-for="(o, index) in teachers"
+           v-bind:key="index"
+           v-bind:value="o.id"
+          >
+           {{ o.name }}
+          </option>
+         </select>
         </div>
        </div>
        <div class="form-group">
@@ -474,12 +503,16 @@ export default {
     oldSort: 0,
     newSort: 0,
    },
+   //老师数组
+   teachers: [],
   };
  },
  mounted: function () {
   let _this = this;
   _this.$refs.pagination.size = 5;
   _this.allCategory();
+  //初始加载所有老师
+  _this.allTeacher();
   _this.list(1);
  },
  methods: {
@@ -729,6 +762,22 @@ export default {
       ToastMin.error("更新排序失败");
      }
     });
+  },
+  //老师列表
+  allTeacher() {
+   let _this = this;
+   Loading.show();
+   _this.$ajax
+    .get(process.env.VUE_APP_SERVER + "/business/admin/teacher/all")
+    .then(
+     //响应结果
+     (response) => {
+      Loading.hide();
+      console.log("老师列表", response);
+      let resp = response.data;
+      _this.teachers = resp.data;
+     }
+    );
   },
  },
 };
