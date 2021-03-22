@@ -7,6 +7,7 @@ import Chapter from "./views/admin/Chapter.vue";
 import Section from "./views/admin/Section.vue";
 import Course from "./views/admin/Course.vue";
 import Category from "./views/admin/Category.vue";
+import Teacher from "./views/admin/Teacher.vue";
 
 Vue.use(Router);
 export default new Router({
@@ -45,6 +46,10 @@ export default new Router({
         name: "business/course",
         path: "business/course",
         component: Course,
+      },{
+        name: "business/teacher",
+        path: "business/teacher",
+        component: Teacher,
       }]
     }
   ],
