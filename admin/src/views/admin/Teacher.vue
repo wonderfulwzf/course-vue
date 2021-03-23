@@ -256,6 +256,7 @@
          <input
           id="uploadImage2"
           type="file"
+          ref="file"
           class="form-control file-upload-input hidden"
           placeholder="头像"
           v-on:change="uploadImage2()"
@@ -491,11 +492,29 @@ export default {
      }
     );
   },
-  //新增文件上传
+  //修改文件上传
   uploadImage2() {
    let _this = this;
    //传输表单.file-upload-input
    let formData = new window.FormData();
+   //获取files
+   let file = _this.$refs.file.files[0];
+   //文件格式判断
+   let suffixs = ["jpg","jpeg","png"];
+   let fileName = file.name;
+   let suffix = fileName.substring(fileName.lastIndexOf(".")+1,fileName.length).toLowerCase();
+   let validateSuffix = false;
+   for(let i = 0;i<suffixs.length;i++){
+     if(suffixs[i].toLowerCase() == suffix){
+       validateSuffix = true;
+       break;
+     }
+   }
+   if(!validateSuffix){
+     ToastMax.warning("上传文件格式不支持,只支持"+suffixs.join(","));
+     return;
+   }
+
    formData.append("file", document.querySelector("#uploadImage2").files[0]);
    Loading.show();
    //确认删除
