@@ -133,13 +133,26 @@
        <div class="form-group">
         <label class="col-sm-2 control-label">头像</label>
         <div class="col-sm-10">
+         <!-- 上传头像按钮 -->
+         <button
+          type="button"
+          class="btn btn-white btn-default btn-round"
+          @click="selectImage()"
+         >
+          <i class="ace-icon fa fa-upload"></i>上传头像
+         </button>
          <input
-         id="qqq"
+          id="uploadImage1"
           type="file"
-          class="form-control file-upload-input"
+          class="form-control file-upload-input hidden"
           placeholder="头像"
-          v-on:change="uploadImage()"
+          v-on:change="uploadImage1()"
          />
+         <div v-show="teacher.image" class="row">
+          <div class="col-md-4">
+           <img v-bind:src="teacher.image" class="img-responsive" />
+          </div>
+         </div>
         </div>
        </div>
        <div class="form-group">
@@ -232,12 +245,26 @@
        <div class="form-group">
         <label class="col-sm-2 control-label">头像</label>
         <div class="col-sm-10">
+         <!-- 上传头像按钮 -->
+         <button
+          type="button"
+          class="btn btn-white btn-default btn-round"
+          @click="selectImage1()"
+         >
+          <i class="ace-icon fa fa-upload"></i>上传头像
+         </button>
          <input
+          id="uploadImage2"
           type="file"
-          class="form-control file-upload-input"
+          class="form-control file-upload-input hidden"
           placeholder="头像"
-          v-on:change="uploadImage()"
+          v-on:change="uploadImage2()"
          />
+         <div v-show="teacher.image" class="row">
+          <div class="col-md-4">
+           <img v-bind:src="teacher.image" class="img-responsive" />
+          </div>
+         </div>
         </div>
        </div>
        <div class="form-group">
@@ -438,32 +465,65 @@ export default {
      );
    });
   },
-  //文件上传
-  uploadImage() {
+  //新增文件上传
+  uploadImage1() {
    let _this = this;
    //传输表单.file-upload-input
    let formData = new window.FormData();
-   formData.append("file",document.querySelector("#qqq").files[0]);
+   formData.append("file", document.querySelector("#uploadImage1").files[0]);
    Loading.show();
-    //确认删除
-    _this.$ajax
-     .post(
-      process.env.VUE_APP_SERVER + "/file/admin/upload",formData
-     )
-     .then(
-      //响应结果
-      (response) => {
-        Loading.hide();
-       let resp = response.data;
-       //保存成功
-       if (resp.success) {
-        //刷新列表
-        ToastMin.success("上传文件成功！");
-       }
+   //确认删除
+   _this.$ajax
+    .post(process.env.VUE_APP_SERVER + "/file/admin/upload", formData)
+    .then(
+     //响应结果
+     (response) => {
+      Loading.hide();
+      let resp = response.data;
+      //保存成功
+      if (resp.success) {
+       //刷新列表
+       ToastMin.success("上传文件成功！");
+       //图片返回地址
+       let image = resp.data;
+       _this.teacher.image = image;
       }
-     );
+     }
+    );
+  },
+  //新增文件上传
+  uploadImage2() {
+   let _this = this;
+   //传输表单.file-upload-input
+   let formData = new window.FormData();
+   formData.append("file", document.querySelector("#uploadImage2").files[0]);
+   Loading.show();
+   //确认删除
+   _this.$ajax
+    .post(process.env.VUE_APP_SERVER + "/file/admin/upload", formData)
+    .then(
+     //响应结果
+     (response) => {
+      Loading.hide();
+      let resp = response.data;
+      //保存成功
+      if (resp.success) {
+       //刷新列表
+       ToastMin.success("上传文件成功！");
+       //图片返回地址
+       let image = resp.data;
+       _this.teacher.image = image;
+      }
+     }
+    );
   },
 
+  selectImage() {
+   $("#uploadImage1").trigger("click");
+  },
+  selectImage1() {
+   $("#uploadImage2").trigger("click");
+  },
  },
 };
 </script>
