@@ -34,6 +34,9 @@ export default {
   suffixs: {
    default: [],
   },
+  use:{
+    default:"",
+  }
  },
  data: function () {
   return {};
@@ -71,6 +74,7 @@ export default {
    }
 
    formData.append("file",file);
+   formData.append('use', _this.use);
    Loading.show();
    //确认删除
    _this.$ajax

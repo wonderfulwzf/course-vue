@@ -247,6 +247,7 @@
         <div class="col-sm-10">
          <!-- 上传组件 -->
          <file
+          v-bind:use="FILE_USE.TEACHER.value"
           v-bind:text="'上传头像1'"
           v-bind:after-upload="afterUpload"
           v-bind:id="'teacher-update'"
@@ -320,6 +321,7 @@ export default {
   return {
    teacher: {},
    teachers: [],
+   FILE_USE: FILE_USE,
   };
  },
  mounted: function () {

@@ -35,7 +35,7 @@
      <td>{{ file.path }}</td>
      <td>{{ file.name }}</td>
      <td>{{ file.suffix }}</td>
-     <td>{{ file.size }}</td>
+     <td>{{ file.size |formatFileSize}}</td>
      <td>{{ file.use }}</td>
      <td>{{ file.createdAt }}</td>
      <td>{{ file.updatedAt }}</td>
