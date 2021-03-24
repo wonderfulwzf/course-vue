@@ -194,6 +194,19 @@
        <div class="form-group">
         <label class="col-sm-2 control-label">封面</label>
         <div class="col-sm-10">
+         <!-- 上传组件 -->
+         <file
+          v-bind:use="FILE_USE.COURSE.value"
+          v-bind:text="'上传封面'"
+          v-bind:after-upload="afterUpload"
+          v-bind:id="'course-add'"
+          v-bind:suffixs="['jpg', 'jpeg', 'png']"
+         ></file>
+         <div v-show="course.image" class="row">
+          <div class="col-md-4">
+           <img v-bind:src="course.image" class="img-responsive" />
+          </div>
+         </div>
          <input
           type="text"
           class="form-control"
@@ -370,6 +383,19 @@
        <div class="form-group">
         <label class="col-sm-2 control-label">封面</label>
         <div class="col-sm-10">
+         <!-- 上传组件 -->
+         <file
+          v-bind:use="FILE_USE.COURSE.value"
+          v-bind:text="'上传封面'"
+          v-bind:after-upload="afterUpload"
+          v-bind:id="'course-update'"
+          v-bind:suffixs="['jpg', 'jpeg', 'png']"
+         ></file>
+         <div v-show="course.image" class="row">
+          <div class="col-md-4">
+           <img v-bind:src="course.image" class="img-responsive" />
+          </div>
+         </div>
          <input
           type="text"
           class="form-control"
@@ -507,8 +533,9 @@
 
 <script>
 import Pagination from "../../components/Pagination.vue";
+import File from "../../components/File.vue";
 export default {
- components: { Pagination },
+ components: { Pagination, File },
  name: "course",
  //返回值
  data: function () {
@@ -528,6 +555,7 @@ export default {
    },
    //老师数组
    teachers: [],
+   FILE_USE: FILE_USE,
   };
  },
  mounted: function () {
@@ -801,6 +829,12 @@ export default {
       _this.teachers = resp.data;
      }
     );
+  },
+  afterUpload(resp) {
+   let _this = this;
+   //图片返回地址
+   let image = resp.data.path;
+   _this.course.image = image;
   },
  },
 };

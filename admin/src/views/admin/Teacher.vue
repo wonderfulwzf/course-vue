@@ -133,21 +133,14 @@
        <div class="form-group">
         <label class="col-sm-2 control-label">头像</label>
         <div class="col-sm-10">
-         <!-- 上传头像按钮 -->
-         <button
-          type="button"
-          class="btn btn-white btn-default btn-round"
-          @click="selectImage()"
-         >
-          <i class="ace-icon fa fa-upload"></i>上传头像
-         </button>
-         <input
-          id="uploadImage1"
-          type="file"
-          class="form-control file-upload-input hidden"
-          placeholder="头像"
-          v-on:change="uploadImage1()"
-         />
+        <!-- 上传组件 -->
+         <file
+          v-bind:use="FILE_USE.TEACHER.value"
+          v-bind:text="'上传头像1'"
+          v-bind:after-upload="afterUpload"
+          v-bind:id="'teacher-add'"
+          v-bind:suffixs="['jpg', 'jpeg', 'png']"
+         ></file>
          <div v-show="teacher.image" class="row">
           <div class="col-md-4">
            <img v-bind:src="teacher.image" class="img-responsive" />
@@ -492,7 +485,7 @@ export default {
   afterUpload(resp) {
    let _this = this;
    //图片返回地址
-   let image = resp.data;
+   let image = resp.data.path;
    _this.teacher.image = image;
   },
  },

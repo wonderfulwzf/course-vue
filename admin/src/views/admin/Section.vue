@@ -1,7 +1,6 @@
 <template>
  <div>
   <p>
-   
    <!-- 去课程页面 -->
    <button class="btn btn-white btn-default btn-round" @click="toCourse()">
     <i class="ace-icon fa fa-arrow-left icon-on-letf"></i>课程
@@ -10,7 +9,7 @@
    <button class="btn btn-white btn-default btn-round" @click="toChapter()">
     <i class="ace-icon fa fa-arrow-left icon-on-letf"></i>大章
    </button>
- 
+
    <!-- 新增按钮 -->
    <button class="btn btn-white btn-default btn-round" @click="toadd()">
     <i class="ace-icon fa fa-edit"></i>新 增
@@ -133,6 +132,19 @@
        <div class="form-group">
         <label class="col-sm-2 control-label">视频</label>
         <div class="col-sm-10">
+        <!-- 上传组件 -->
+         <file
+          v-bind:use="FILE_USE.COURSE.value"
+          v-bind:text="'上传视频'"
+          v-bind:after-upload="afterUpload"
+          v-bind:id="'section-add'"
+          v-bind:suffixs="['mp4']"
+         ></file>
+         <div v-show="section.video" class="row">
+          <div class="col-md-4">
+           <video v-bind:src="section.video"  controls="controls"></video>
+          </div>
+         </div>
          <input
           type="text"
           class="form-control"
@@ -234,6 +246,19 @@
        <div class="form-group">
         <label class="col-sm-2 control-label">视频</label>
         <div class="col-sm-10">
+         <!-- 上传组件 -->
+         <file
+          v-bind:use="FILE_USE.COURSE.value"
+          v-bind:text="'上传视频'"
+          v-bind:after-upload="afterUpload"
+          v-bind:id="'section-update'"
+          v-bind:suffixs="['mp4']"
+         ></file>
+         <div v-show="section.video" class="row">
+          <div class="col-md-5">
+           <video v-bind:src="section.video"  controls="controls"></video>
+          </div>
+         </div>
          <input
           type="text"
           class="form-control"
@@ -286,8 +311,9 @@
 
 <script>
 import Pagination from "../../components/Pagination.vue";
+import File from "../../components/File.vue";
 export default {
- components: { Pagination },
+ components: { Pagination ,File},
  name: "business-section",
  //返回值
  data: function () {
@@ -295,17 +321,18 @@ export default {
    section: {},
    sections: [],
    CHARGE: SECTION_CHARGE,
-   course:{},
-   chapter:{}
+   course: {},
+   chapter: {},
+   FILE_USE: FILE_USE,
   };
  },
  mounted: function () {
   let _this = this;
   _this.$refs.pagination.size = 5;
-  let course = SessionStorage.get(SESSION_KEY_COURSE,course)||{};
-  let chapter = SessionStorage.get(SESSION_KEY_CHAPTER,chapter)||{};
-  if(Tool.isEmpty(course)||Tool.isEmpty(chapter)){
-      _this.$router.push("/welcome");
+  let course = SessionStorage.get(SESSION_KEY_COURSE, course) || {};
+  let chapter = SessionStorage.get(SESSION_KEY_CHAPTER, chapter) || {};
+  if (Tool.isEmpty(course) || Tool.isEmpty(chapter)) {
+   _this.$router.push("/welcome");
   }
   _this.course = course;
   _this.chapter = chapter;
@@ -338,7 +365,7 @@ export default {
       pageSize: _this.$refs.pagination.size,
       pageNo: page,
       courseId: _this.course.id,
-      chapterId: _this.chapter.id
+      chapterId: _this.chapter.id,
      }
     )
     .then(
@@ -450,6 +477,19 @@ export default {
    let _this = this;
    _this.$router.push("/business/chapter");
   },
+  afterUpload(resp) {
+   let _this = this;
+   //图片返回地址
+   let video = resp.data.path;
+   _this.section.video = video;
+  },
  },
 };
 </script>
+<style scoped>
+  video {
+    width: 100%;
+    height: auto;
+    margin-top: 10px;
+  }
+</style>
