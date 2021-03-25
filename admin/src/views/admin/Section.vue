@@ -132,7 +132,7 @@
        <div class="form-group">
         <label class="col-sm-2 control-label">视频</label>
         <div class="col-sm-10">
-        <!-- 上传组件 -->
+         <!-- 上传组件 -->
          <file
           v-bind:use="FILE_USE.COURSE.value"
           v-bind:text="'上传视频'"
@@ -140,9 +140,9 @@
           v-bind:id="'section-add'"
           v-bind:suffixs="['mp4']"
          ></file>
-         <div v-show="section.video" class="row">
+         <div v-if="section.video" class="row">
           <div class="col-md-4">
-           <video v-bind:src="section.video"  controls="controls"></video>
+           <video v-bind:src="section.video" controls="controls"></video>
           </div>
          </div>
          <input
@@ -256,7 +256,11 @@
          ></file>
          <div v-show="section.video" class="row">
           <div class="col-md-5">
-           <video v-bind:src="section.video"  controls="controls"></video>
+           <video
+            v-bind:src="section.video"
+            controls="controls"
+            id="video1"
+           ></video>
           </div>
          </div>
          <input
@@ -313,7 +317,7 @@
 import Pagination from "../../components/Pagination.vue";
 import File from "../../components/File.vue";
 export default {
- components: { Pagination ,File},
+ components: { Pagination, File },
  name: "business-section",
  //返回值
  data: function () {
@@ -342,7 +346,9 @@ export default {
   //添加打开模态框
   toadd() {
    let _this = this;
-   _this.section = {};
+   _this.section = {
+    video: "",
+   };
    $("#section-add-model").modal("show");
   },
   //
@@ -481,15 +487,26 @@ export default {
    let _this = this;
    //图片返回地址
    let video = resp.data.path;
+   _this.getTime("video1");
    _this.section.video = video;
+  },
+  /**
+   * 获取时长
+   */
+  getTime(id) {
+   let _this = this;
+   let ele = document.getElementById(id);
+   setTimeout(function () {
+    _this.section.time = parseInt(ele.duration, 10);
+   }, 1000);
   },
  },
 };
 </script>
 <style scoped>
-  video {
-    width: 100%;
-    height: auto;
-    margin-top: 10px;
-  }
+video {
+ width: 100%;
+ height: auto;
+ margin-top: 10px;
+}
 </style>
