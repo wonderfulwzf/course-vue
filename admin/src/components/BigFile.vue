@@ -80,7 +80,7 @@ export default {
    //总分片数
    let shardTotal = Math.ceil(size / shardSize);
    //文件标识
-   let key = hex_md5(file);
+   let key = hex_md5(file.name + file.size + file.type);
    //穿参
    formData.append("use", _this.use);
    formData.append("shardIndex", shardIndex);
@@ -110,6 +110,7 @@ export default {
    */
   check(param) {
    let _this = this;
+   console.log(param.key);
    _this.$ajax
     .get(process.env.VUE_APP_SERVER + "/file/admin/check/" + param.key)
     .then((response) => {
@@ -146,30 +147,33 @@ export default {
    let fileShard = _this.getfileShard(shardIndex, shardSize);
    //将图片转为base64进行传输
    let fileReader = new FileReader();
+   Progress.show(parseInt(shardIndex-1)*100/shardTotal)
    fileReader.onload = function (e) {
     let base64 = e.target.result;
     param.shard = base64;
-    Loading.show();
+    //Loading.show();
     //文件上传
     _this.$ajax
      .post(process.env.VUE_APP_SERVER + "/file/admin/upload", param)
      .then(
       //响应结果
       (response) => {
-       Loading.hide();
+       //Loading.hide();
        let resp = response.data;
        //保存成功
        if (resp.success) {
         console.log(shardIndex + 111111111);
         //判断是否全部上传成功
+        Progress.show(parseInt(shardIndex)*100/shardTotal)
         if (shardIndex < shardTotal) {
          param.shardIndex = param.shardIndex + 1;
          //继续上传
          console.log(1);
          _this.upload(param);
         } else {
+         Progress.hide(); 
          _this.afterUpload(resp);
-         //$("#" + _this.inputId + "-input").val("");
+         $("#" + _this.inputId + "-input").val("");
         }
         ToastMin.success("上传文件成功！");
        }

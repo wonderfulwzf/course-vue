@@ -133,24 +133,18 @@
         <label class="col-sm-2 control-label">视频</label>
         <div class="col-sm-10">
          <!-- 上传组件 -->
-         <!-- <file
+         <big-file
           v-bind:use="FILE_USE.COURSE.value"
           v-bind:text="'上传视频'"
           v-bind:after-upload="afterUpload"
           v-bind:id="'section-add'"
           v-bind:suffixs="['mp4']"
-         ></file> -->
+         ></big-file>
          <div v-if="section.video" class="row">
           <div class="col-md-4">
            <video v-bind:src="section.video" controls="controls"></video>
           </div>
          </div>
-         <input
-          type="text"
-          class="form-control"
-          placeholder="视频"
-          v-model="section.video"
-         />
         </div>
        </div>
        <div class="form-group">
@@ -314,7 +308,6 @@
 
 <script>
 import Pagination from "../../components/Pagination.vue";
-//import File from "../../components/File.vue";
 import BigFile from "../../components/BigFile.vue";
 export default {
  components: { Pagination,BigFile },

@@ -134,13 +134,13 @@
         <label class="col-sm-2 control-label">头像</label>
         <div class="col-sm-10">
         <!-- 上传组件 -->
-         <file
+         <big-file
           v-bind:use="FILE_USE.TEACHER.value"
           v-bind:text="'上传头像1'"
           v-bind:after-upload="afterUpload"
           v-bind:id="'teacher-add'"
           v-bind:suffixs="['jpg', 'jpeg', 'png']"
-         ></file>
+         ></big-file>
          <div v-show="teacher.image" class="row">
           <div class="col-md-4">
            <img v-bind:src="teacher.image" class="img-responsive" />
@@ -239,13 +239,13 @@
         <label class="col-sm-2 control-label">头像</label>
         <div class="col-sm-10">
          <!-- 上传组件 -->
-         <file
+         <big-file
           v-bind:use="FILE_USE.TEACHER.value"
           v-bind:text="'上传头像1'"
           v-bind:after-upload="afterUpload"
           v-bind:id="'teacher-update'"
           v-bind:suffixs="['jpg', 'jpeg', 'png']"
-         ></file>
+         ></big-file>
          <div v-show="teacher.image" class="row">
           <div class="col-md-4">
            <img v-bind:src="teacher.image" class="img-responsive" />
@@ -304,10 +304,10 @@
 </template>
 
 <script>
-import File from "../../components/File.vue";
+import BigFile from "../../components/BigFile.vue";
 import Pagination from "../../components/Pagination.vue";
 export default {
- components: { Pagination, File },
+ components: { Pagination, BigFile },
  name: "teacher",
  //返回值
  data: function () {
@@ -326,7 +326,9 @@ export default {
   //添加老师打开模态框
   toadd() {
    let _this = this;
-   _this.teacher = {};
+   _this.teacher = {
+     image:"",
+   };
    $("#teacher-add-model").modal("show");
   },
   //

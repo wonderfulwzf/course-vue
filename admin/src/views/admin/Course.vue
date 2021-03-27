@@ -195,24 +195,18 @@
         <label class="col-sm-2 control-label">封面</label>
         <div class="col-sm-10">
          <!-- 上传组件 -->
-         <file
+         <big-file
           v-bind:use="FILE_USE.COURSE.value"
           v-bind:text="'上传封面'"
           v-bind:after-upload="afterUpload"
           v-bind:id="'course-add'"
           v-bind:suffixs="['jpg', 'jpeg', 'png']"
-         ></file>
+         ></big-file>
          <div v-show="course.image" class="row">
           <div class="col-md-4">
            <img v-bind:src="course.image" class="img-responsive" />
           </div>
          </div>
-         <input
-          type="text"
-          class="form-control"
-          placeholder="封面"
-          v-model="course.image"
-         />
         </div>
        </div>
 
@@ -384,24 +378,18 @@
         <label class="col-sm-2 control-label">封面</label>
         <div class="col-sm-10">
          <!-- 上传组件 -->
-         <file
+         <big-file
           v-bind:use="FILE_USE.COURSE.value"
           v-bind:text="'上传封面'"
           v-bind:after-upload="afterUpload"
           v-bind:id="'course-update'"
           v-bind:suffixs="['jpg', 'jpeg', 'png']"
-         ></file>
+         ></big-file>
          <div v-show="course.image" class="row">
           <div class="col-md-4">
            <img v-bind:src="course.image" class="img-responsive" />
           </div>
          </div>
-         <input
-          type="text"
-          class="form-control"
-          placeholder="封面"
-          v-model="course.image"
-         />
         </div>
        </div>
        <div class="form-group">
@@ -533,9 +521,9 @@
 
 <script>
 import Pagination from "../../components/Pagination.vue";
-import File from "../../components/File.vue";
+import BigFile from "../../components/BigFile.vue";
 export default {
- components: { Pagination, File },
+ components: { Pagination, BigFile },
  name: "course",
  //返回值
  data: function () {
@@ -572,6 +560,7 @@ export default {
    let _this = this;
    _this.course = {
     sort: _this.$refs.pagination.total + 1,
+    image:""
    };
    $("#course-add-model").modal("show");
   },
