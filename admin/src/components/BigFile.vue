@@ -8,7 +8,7 @@
    <i class="ace-icon fa fa-upload"></i>{{ text }}
   </button>
   <input
-   v-bind:id="inputId+'-input'"
+   v-bind:id="inputId + '-input'"
    type="file"
    ref="file"
    class="form-control file-upload-input hidden"
@@ -34,9 +34,9 @@ export default {
   suffixs: {
    default: [],
   },
-  use:{
-    default:"",
-  }
+  use: {
+   default: "",
+  },
  },
  data: function () {
   return {};
@@ -44,8 +44,8 @@ export default {
  methods: {
   //选择上传文件
   selectFile() {
-    let _this = this;
-   $("#"+_this.inputId+"-input").trigger("click");
+   let _this = this;
+   $("#" + _this.inputId + "-input").trigger("click");
   },
   //修改文件上传
   uploadFile() {
@@ -68,23 +68,35 @@ export default {
     }
    }
    if (!validateSuffix) {
-     $("#"+_this.inputId+"-input").val("");
+    $("#" + _this.inputId + "-input").val("");
     ToastMax.warning("上传文件格式不支持,只支持" + suffixs.join(","));
     return;
    }
-    console.log("3231");
+   console.log("3231");
    //文件分
-   let shardIndex =1;
-   console.log(shardIndex);
-   let shardSize =20 * 1024 * 1024;
-     console.log(shardSize);
-   let start = shardIndex * shardSize;	//当前分片起始位置
-   console.log(start);
+   let shardIndex = 1; //分片索引
+   let shardSize = 20 * 1024 * 1024; //分片大小
+   let start = (shardIndex - 1) * shardSize; //当前分片起始位置
    let end = Math.min(file.size, start + shardSize); //当前分片结束位置
-   console.log(end);
-   let fileShard = file.slice(start,end); //从文件中截取当前的分片数据
-   formData.append("file",fileShard);
-   formData.append('use', _this.use);
+   let fileShard = file.slice(start, end); //从文件中截取当前的分片数据
+
+   //文件大小
+   let size = file.size;
+   //总分片数
+   let shardTotal = Math.ceil(size / shardSize);
+   //文件标识
+   let key = hex_md5(file);
+   //穿参
+   formData.append("file", fileShard);
+   formData.append("use", _this.use);
+   formData.append("shardIndex", shardIndex);
+   formData.append("shardSize", shardSize);
+   formData.append("shardTotal", shardTotal);
+   formData.append("name", file.name);
+   formData.append("suffix", suffix);
+   formData.append("size", size);
+   formData.append("key", key);
+
    Loading.show();
    //文件上传
    _this.$ajax
@@ -94,7 +106,7 @@ export default {
      (response) => {
       Loading.hide();
       let resp = response.data;
-      $("#"+_this.inputId+"-input").val("");
+      $("#" + _this.inputId + "-input").val("");
       //保存成功
       if (resp.success) {
        //刷新列表
