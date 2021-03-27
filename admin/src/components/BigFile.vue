@@ -74,7 +74,7 @@ export default {
    }
    //文件分
    let shardIndex = 1; //分片索引
-   let shardSize = 20 * 1024 * 1024; //分片大小
+   let shardSize = 10 * 1024 * 1024; //分片大小
    //文件大小
    let size = file.size;
    //总分片数
@@ -102,8 +102,41 @@ export default {
     size: file.size,
     key: key,
    };
-   _this.upload(param);
+   //分片检查
+   _this.check(param);
   },
+  /**
+   * 检查文件状态，是否已上传过？传到第几个分片？
+   */
+  check(param) {
+   let _this = this;
+   _this.$ajax
+    .get(process.env.VUE_APP_SERVER + "/file/admin/check/" + param.key)
+    .then((response) => {
+     let resp = response.data;
+     if (resp.success) {
+      let obj = resp.data;
+      if (!obj) {
+       param.shardIndex = 1;
+       console.log("没有找到文件记录，从分片1开始上传");
+       _this.upload(param);
+      } else if (obj.shardIndex === obj.shardTotal) {
+       // 已上传分片 = 分片总数，说明已全部上传完，不需要再上传
+       ToastMin.success("文件极速秒传成功！");
+       _this.afterUpload(resp);
+       $("#" + _this.inputId + "-input").val("");
+      } else {
+       param.shardIndex = obj.shardIndex + 1;
+       console.log("找到文件记录，从分片" + param.shardIndex + "开始上传");
+       _this.upload(param);
+      }
+     } else {
+      ToastMax.warning("文件上传失败");
+      $("#" + _this.inputId + "-input").val("");
+     }
+    });
+  },
+
   upload: function (param) {
    let _this = this;
    let shardIndex = param.shardIndex;
@@ -136,8 +169,8 @@ export default {
          _this.upload(param);
         } else {
          _this.afterUpload(resp);
+         //$("#" + _this.inputId + "-input").val("");
         }
-        $("#" + _this.inputId + "-input").val("");
         ToastMin.success("上传文件成功！");
        }
       }
