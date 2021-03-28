@@ -34,6 +34,7 @@
      <th>时长</th>
      <th>收费:C收费F免费</th>
      <th>顺序</th>
+     <th>VOD</th>
      <th>创建时间</th>
      <th>修改时间</th>
      <th class="hidden-480">操作</th>
@@ -50,6 +51,7 @@
      <td>{{ section.time | formatSecond }}</td>
      <td>{{ CHARGE | optionKV(section.charge) }}</td>
      <td>{{ section.sort }}</td>
+     <td>{{ section.vod }}</td>
      <td>{{ section.createdAt }}</td>
      <td>{{ section.updatedAt }}</td>
      <td>
@@ -148,6 +150,18 @@
         </div>
        </div>
        <div class="form-group">
+        <label class="col-sm-2 control-label">VOD</label>
+        <div class="col-sm-10">
+         <input
+          type="text"
+          class="form-control"
+          placeholder="vod"
+          disabled
+          v-model="section.vod"
+         />
+        </div>
+       </div>
+       <div class="form-group">
         <label class="col-sm-2 control-label">时长</label>
         <div class="col-sm-10">
          <input
@@ -241,12 +255,12 @@
         <label class="col-sm-2 control-label">视频</label>
         <div class="col-sm-10">
          <!-- 上传组件 -->
-         <big-file
+         <vod
           v-bind:use="FILE_USE.COURSE.value"
           v-bind:after-upload="afterUpload"
           v-bind:id="'section-update'"
           v-bind:suffixs="['mp4']"
-         ></big-file>
+         ></vod>
          <div v-show="section.video" class="row">
           <div class="col-md-5">
            <video
@@ -256,11 +270,29 @@
            ></video>
           </div>
          </div>
+        </div>
+       </div>
+       <div class="form-group">
+        <label class="col-sm-2 control-label">视频</label>
+        <div class="col-sm-10">
          <input
           type="text"
           class="form-control"
           placeholder="视频"
+          disabled
           v-model="section.video"
+         />
+        </div>
+       </div>
+       <div class="form-group">
+        <label class="col-sm-2 control-label">VOD</label>
+        <div class="col-sm-10">
+         <input
+          type="text"
+          class="form-control"
+          placeholder="vod"
+          disabled
+          v-model="section.vod"
          />
         </div>
        </div>
@@ -308,9 +340,13 @@
 
 <script>
 import Pagination from "../../components/Pagination.vue";
+
 import BigFile from "../../components/BigFile.vue";
+import Vod from '../../components/Vod';
+//import Vod from "../../components/Vod.vue";
+
 export default {
- components: { Pagination,BigFile },
+ components: { Pagination,BigFile, Vod },
  name: "business-section",
  //返回值
  data: function () {

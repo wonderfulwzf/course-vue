@@ -22,7 +22,7 @@ export default {
  name: "bigfile",
  props: {
   text: {
-   default: "上传a",
+   default: "上传文件",
   },
   inputId: {
    default: "file-upload",
@@ -37,6 +37,13 @@ export default {
   use: {
    default: "",
   },
+  shardSize:{
+    default:50*1024*1024,
+  },
+  url:{
+    default:"append_upload",
+  }
+
  },
  data: function () {
   return {};
@@ -74,7 +81,7 @@ export default {
    }
    //文件分
    let shardIndex = 1; //分片索引
-   let shardSize = 10 * 1024 * 1024; //分片大小
+   let shardSize = _this.shardSize; //分片大小
    //文件大小
    let size = file.size;
    //总分片数
@@ -154,7 +161,7 @@ export default {
     //Loading.show();
     //文件上传
     _this.$ajax
-     .post(process.env.VUE_APP_SERVER + "/file/admin/upload", param)
+     .post(process.env.VUE_APP_SERVER + "/file/admin/"+_this.url, param)
      .then(
       //响应结果
       (response) => {
