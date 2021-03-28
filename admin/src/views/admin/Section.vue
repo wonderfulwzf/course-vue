@@ -30,7 +30,7 @@
      <th>标题</th>
      <th>课程</th>
      <th>大章</th>
-     <th>视频</th>
+     <!-- <th>视频</th> -->
      <th>时长</th>
      <th>收费:C收费F免费</th>
      <th>顺序</th>
@@ -47,7 +47,7 @@
      <td>{{ section.title }}</td>
      <td>{{ section.courseId }}</td>
      <td>{{ section.chapterId }}</td>
-     <td>{{ section.video }}</td>
+     <!-- <td>{{ section.video }}</td> -->
      <td>{{ section.time | formatSecond }}</td>
      <td>{{ CHARGE | optionKV(section.charge) }}</td>
      <td>{{ section.sort }}</td>
@@ -272,6 +272,7 @@
          </div>
         </div>
        </div>
+       <!-- 视频地址太长不展示 -->
        <div class="form-group">
         <label class="col-sm-2 control-label">视频</label>
         <div class="col-sm-10">
@@ -283,7 +284,7 @@
           v-model="section.video"
          />
         </div>
-       </div>
+       </div> 
        <div class="form-group">
         <label class="col-sm-2 control-label">VOD</label>
         <div class="col-sm-10">
@@ -425,8 +426,9 @@ export default {
    ) {
     return;
    }
+  _this.section.video = "";
    _this.section.courseId = _this.course.id;
-   _this.section.chapterId = this.chapter.id;
+   _this.section.chapterId = _this.chapter.id;
    Loading.show();
    _this.$ajax
     .post(
@@ -516,8 +518,10 @@ export default {
    let _this = this;
    //图片返回地址
    let video = resp.data.path;
+   let vod = resp.data.vod;
    _this.getTime("video1");
    _this.section.video = video;
+   _this.section.vod = vod; 
   },
   /**
    * 获取时长
@@ -527,7 +531,7 @@ export default {
    let ele = document.getElementById(id);
    setTimeout(function () {
     _this.section.time = parseInt(ele.duration, 10);
-   }, 1000);
+   }, 3000);
   },
  },
 };
