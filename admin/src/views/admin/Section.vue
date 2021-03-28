@@ -268,6 +268,7 @@
             controls="controls"
             id="video1"
            ></video>
+           <player ref="player"></player>
           </div>
          </div>
         </div>
@@ -344,10 +345,11 @@ import Pagination from "../../components/Pagination.vue";
 
 import BigFile from "../../components/BigFile.vue";
 import Vod from '../../components/Vod';
+import Player from '../../components/Player.vue';
 //import Vod from "../../components/Vod.vue";
 
 export default {
- components: { Pagination,BigFile, Vod },
+ components: { Pagination,BigFile, Vod, Player },
  name: "business-section",
  //返回值
  data: function () {
@@ -522,6 +524,8 @@ export default {
    _this.getTime("video1");
    _this.section.video = video;
    _this.section.vod = vod; 
+   //播放视频
+   _this.$refs.player.playUrl(video);
   },
   /**
    * 获取时长
