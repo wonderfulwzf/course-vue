@@ -431,14 +431,16 @@
         <b class="arrow"></b>
        </li>
 
-       <li class="">
-        <a href="tables.html">
+         <li class="" id="system-user-sidebar">
+        <!-- 跳转 -->
+        <router-link to="/system/user">
          <i class="menu-icon fa fa-caret-right"></i>
          用户管理
-        </a>
-
+        </router-link>
         <b class="arrow"></b>
        </li>
+
+
        <li class="">
         <a href="jqgrid.html">
          <i class="menu-icon fa fa-caret-right"></i>

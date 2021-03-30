@@ -9,6 +9,7 @@ import Course from "./views/admin/Course.vue";
 import Category from "./views/admin/Category.vue";
 import Teacher from "./views/admin/Teacher.vue";
 import File from "./views/admin/File.vue";
+import User from "./views/admin/User.vue";
 
 Vue.use(Router);
 export default new Router({
@@ -22,6 +23,10 @@ export default new Router({
     {
       path: "/login",
       component: Login,
+    },
+    {
+      path: "",
+      redirect: "/login",
     },
     {
       path: "/",
@@ -55,6 +60,10 @@ export default new Router({
         name: "file/file",
         path: "file/file",
         component: File,
+      },{
+        name: "system/user",
+        path: "system/user",
+        component: User,
       }]
     }
   ],
