@@ -26,7 +26,7 @@
           _this.aliPlayer = null;
           $("#" + _this.playerId + '-player').remove();
         }
-
+        console.log(_this.playerId);
         // 初始化播放器
         $("#" + _this.playerId).append("<div class=\"prism-player\" id=\"" + _this.playerId + "-player\"></div>");
         _this.aliPlayer = new Aliplayer({
@@ -34,8 +34,10 @@
           width: '100%',
           autoplay: false,
           source: url,
+          //封面地址
           cover: 'http://liveroom-img.oss-cn-qingdao.aliyuncs.com/logo.png',
         }, function (player) {// eslint-disable-line no-unused-vars
+        console.log(_this.playerId);
           console.log('播放器创建好了。')
         });
       },
@@ -52,7 +54,8 @@
               _this.aliPlayer = null;
               $("#" + _this.playerId + '-player').remove();
             }
-
+            console.log(_this.playerId);
+            console.log(resp.data);
             // 初始化播放器
             $("#" + _this.playerId).append("<div class=\"prism-player\" id=\"" + _this.playerId + "-player\"></div>");
             _this.aliPlayer = new Aliplayer({
@@ -60,7 +63,7 @@
               width: '100%',
               autoplay: false,
               vid: vod,
-              playauth: resp.content,
+              playauth: resp.data,
               cover: 'http://liveroom-img.oss-cn-qingdao.aliyuncs.com/logo.png',
               encryptType:1, //当播放私有加密流时需要设置。
             },function(player){// eslint-disable-line no-unused-vars

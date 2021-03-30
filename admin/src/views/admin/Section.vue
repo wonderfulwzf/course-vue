@@ -64,6 +64,10 @@
        <button class="btn btn-xs btn-danger" @click="del(section.id)">
         <i class="ace-icon fa fa-trash-o bigger-120"></i>
        </button>
+        <!-- 预览 -->
+       <button class="btn btn-xs btn-info" @click="play(section)">
+        <i class="ace-icon fa fa-video-camera bigger-120"></i>
+       </button>
       </div>
      </td>
     </tr>
@@ -262,13 +266,13 @@
           v-bind:suffixs="['mp4']"
          ></vod>
          <div v-show="section.video" class="row">
-          <div class="col-md-5">
-           <video
+          <div class="col-md-9">
+           <!-- <video
             v-bind:src="section.video"
             controls="controls"
             id="video1"
-           ></video>
-           <player ref="player"></player>
+           ></video> -->
+           <player ref="player" v-bind:playerId="'form-player-dev'"></player>
           </div>
          </div>
         </div>
@@ -335,8 +339,24 @@
      </div>
     </div>
    </div>
+   <modal-player ref="modelPlayer"></modal-player>
   </div>
-  <!-- /.modal -->
+ <div id="player-modal" class="modal fade" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-body">
+        <h4 class="modal-title">表单</h4>
+        <player v-bind:player-id="'modal-player-div'"
+                ref="modalPlayer"></player>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  
+    
+
+  
  </div>
 </template>
 
@@ -346,10 +366,11 @@ import Pagination from "../../components/Pagination.vue";
 import BigFile from "../../components/BigFile.vue";
 import Vod from '../../components/Vod';
 import Player from '../../components/Player.vue';
+import ModalPlayer from '../../components/ModalPlayer.vue';
 //import Vod from "../../components/Vod.vue";
 
 export default {
- components: { Pagination,BigFile, Vod, Player },
+ components: { Pagination,BigFile, Vod, Player, ModalPlayer },
  name: "business-section",
  //返回值
  data: function () {
@@ -537,6 +558,14 @@ export default {
     _this.section.time = parseInt(ele.duration, 10);
    }, 3000);
   },
+  //播放视频
+  play(section){
+    let _this = this;
+
+    _this.$refs.modalPlayer.playVod(section.vod);
+    
+    $("#player-modal").modal("show");
+  }
  },
 };
 </script>
