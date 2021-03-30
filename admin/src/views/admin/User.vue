@@ -41,6 +41,10 @@
        <button class="btn btn-xs btn-danger" @click="del(user.id)">
         <i class="ace-icon fa fa-trash-o bigger-120"></i>
        </button>
+       <!-- 修改密码 -->
+       <button class="btn btn-xs btn-info" @click="toEditPassword(user)">
+        <i class="ace-icon fa fa-key bigger-120"></i>
+       </button>
       </div>
      </td>
     </tr>
@@ -186,6 +190,48 @@
     </div>
    </div>
   </div>
+  <!-- 编辑模态框 -->
+  <div id="password-edit-model" class="modal fade" tabindex="-1" role="dialog">
+   <div class="modal-dialog" role="document">
+    <div class="modal-content">
+     <div class="modal-header">
+      <button
+       type="button"
+       class="close"
+       data-dismiss="modal"
+       aria-label="Close"
+      >
+       <span aria-hidden="true">&times;</span>
+      </button>
+      <h4 class="modal-title">修改密码表单</h4>
+     </div>
+     <div class="modal-body">
+      <!-- 修改表单 -->
+      <form class="form-horizontal">
+       <div class="form-group">
+        <label class="col-sm-2 control-label">密码</label>
+        <div class="col-sm-10">
+         <input
+          type="password"
+          class="form-control"
+          placeholder="密码"
+          v-model="user.password"
+         />
+        </div>
+       </div>
+      </form>
+     </div>
+     <div class="modal-footer">
+      <button type="button" class="btn btn-default" data-dismiss="modal">
+       取消
+      </button>
+      <button type="button" class="btn btn-primary" v-on:click="savePassword()">
+       保存
+      </button>
+     </div>
+    </div>
+   </div>
+  </div>
   <!-- /.modal -->
  </div>
 </template>
@@ -221,6 +267,14 @@ export default {
    //消除双向绑定，复制对象
    _this.user = $.extend({}, user);
    $("#user-update-model").modal("show");
+  },
+   //添加打开模态框
+  toEditPassword(user) {
+   let _this = this;
+   //消除双向绑定，复制对象
+   _this.user = $.extend({}, user);
+   _this.user.password = null;
+   $("#password-edit-model").modal("show");
   },
   //列表
   list(page) {
@@ -259,6 +313,8 @@ export default {
    ) {
     return;
    }
+   //对密码进行加密
+   _this.user.password = hex_md5(_this.user.password+KEY);
    Loading.show();
    _this.$ajax
     .post(
@@ -331,6 +387,46 @@ export default {
       }
      );
    });
+  },
+  //保存
+  savePassword() {
+   let _this = this;
+   // 保存校验
+   if (
+    1 != 1 ||
+    !Validator.require(_this.user.loginName, "登录名") ||
+    !Validator.length(_this.user.loginName, "登录名", 1, 50) ||
+    !Validator.length(_this.user.name, "昵称", 1, 50) ||
+    !Validator.require(_this.user.password, "密码")
+   ) {
+    return;
+   }
+   //对密码进行加密
+   _this.user.password = hex_md5(_this.user.password+KEY);
+   Loading.show();
+   _this.$ajax
+    .post(
+     process.env.VUE_APP_SERVER + "/system/admin/user/save_password",
+     //传参对象
+     _this.user
+    )
+    .then(
+     //响应结果
+     (response) => {
+      console.log("保存成功", response);
+      let resp = response.data;
+      //保存成功
+      if (resp.success) {
+       //关闭模态框
+       $("#password-edit-model").modal("hide");
+       //刷新列表
+       _this.list(1);
+       ToastMin.success("保存成功！");
+      } else {
+       ToastMax.warning(resp.message);
+      }
+     }
+    );
   },
  },
 };
