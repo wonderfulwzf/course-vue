@@ -592,6 +592,8 @@ export default {
   $("body").removeClass("login-layout light-login");
   $("body").attr("class", "no-skin");
   _this.activeSidebar(_this.$route.name.replace("/", "-") + "-sidebar");
+  //重新加载js
+  $.getScript('/ace/assets/js/ace.min.js');
  },
  //监听
  watch: {
