@@ -328,36 +328,19 @@
          alt="Jason's Photo"
         />
         <span class="user-info">
-         <small>Welcome,</small>
-         Jason
+         <small>Welcome</small>
+         {{loginUser.loginName}}
         </span>
 
         <i class="ace-icon fa fa-caret-down"></i>
        </a>
-
        <ul
         class="user-menu dropdown-menu-right dropdown-menu dropdown-yellow dropdown-caret dropdown-close"
        >
         <li>
-         <a href="#">
-          <i class="ace-icon fa fa-cog"></i>
-          Settings
-         </a>
-        </li>
-
-        <li>
-         <a href="profile.html">
-          <i class="ace-icon fa fa-user"></i>
-          Profile
-         </a>
-        </li>
-
-        <li class="divider"></li>
-
-        <li>
-         <a href="#">
+         <a href="#" v-on:click="loginout()">
           <i class="ace-icon fa fa-power-off"></i>
-          Logout
+          退出登录
          </a>
         </li>
        </ul>
@@ -633,6 +616,26 @@ export default {
     parentLi.siblings().find("li").removeClass("active");
     parentLi.addClass("active open");
    }
+  },
+  //退出登录
+   loginout() {
+   let _this = this;
+   _this.$ajax
+    .get(
+     process.env.VUE_APP_SERVER + "/system/admin/user/login_out")
+    .then(
+     //响应结果
+     (response) => {
+      let resp = response.data;
+      //保存成功
+      if (resp.success) {
+       Tool.setLoginUser(null)
+       this.$router.push("/login");
+      }else{
+        ToastMax.error(resp.message);
+      }
+     }
+    );
   },
  },
 };
