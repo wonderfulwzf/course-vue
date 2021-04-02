@@ -56,7 +56,7 @@
 
             <div class="clearfix">
              <label class="inline">
-              <input type="checkbox" class="ace" />
+              <input type="checkbox" class="ace" v-model="remember" />
               <span class="lbl"> 记住 密码</span>
              </label>
 
@@ -99,17 +99,27 @@ export default {
  data: function () {
   return {
    user: {},
+   remember: true,
   };
  },
  mounted: function () {
+  let _this = this;
   $("body").removeClass("no-skin");
   $("body").attr("class", "login-layout light-login");
+  let rememberUser = LocalStorage.get("loginUser");
+  if (rememberUser) {
+   _this.user = rememberUser;
+  }
  },
  methods: {
   login() {
    let _this = this;
-   //对密码进行加密
-   _this.user.password = hex_md5(_this.user.password + KEY);
+   let md5 = hex_md5(_this.user.password);
+   let rememberUser = LocalStorage.get("loginUser")||{};
+   if (md5 != rememberUser.md5) {
+    //对密码进行加密
+    _this.user.password = hex_md5(_this.user.password + KEY);
+   }
    _this.$ajax
     .post(
      process.env.VUE_APP_SERVER + "/system/admin/user/login",
@@ -122,10 +132,21 @@ export default {
       let resp = response.data;
       //保存成功
       if (resp.success) {
-       Tool.setLoginUser(resp.data)
+       let loginuser = resp.data;
+       Tool.setLoginUser(loginuser);
+       if (_this.remember) {
+        let md5 = hex_md5(_this.user.password);
+        LocalStorage.set("loginUser", {
+         loginName: loginuser.loginName,
+         password: _this.user.password,
+         md5: md5,
+        });
+       } else {
+        LocalStorage.set("loginUser", null);
+       }
        this.$router.push("/welcome");
-      }else{
-        ToastMax.error(resp.message);
+      } else {
+       ToastMax.error(resp.message);
       }
      }
     );
