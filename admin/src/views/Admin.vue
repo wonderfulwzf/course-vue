@@ -406,7 +406,7 @@
       <!-- 跳转 -->
       <router-link to="/welcome">
        <i class="menu-icon fa fa-tachometer"></i>
-       <span class="menu-text">欢 迎</span>
+       <span class="menu-text">欢 迎:{{loginUser.name}}</span>
       </router-link>
       <b class="arrow"></b>
      </li>
@@ -431,7 +431,7 @@
         <b class="arrow"></b>
        </li>
 
-         <li class="" id="system-user-sidebar">
+       <li class="" id="system-user-sidebar">
         <!-- 跳转 -->
         <router-link to="/system/user">
          <i class="menu-icon fa fa-caret-right"></i>
@@ -439,7 +439,6 @@
         </router-link>
         <b class="arrow"></b>
        </li>
-
 
        <li class="">
         <a href="jqgrid.html">
@@ -587,13 +586,21 @@
 
 <script>
 export default {
+ //返回值
+ data: function () {
+  return {
+   loginUser: {},
+  };
+ },
  mounted: function () {
   let _this = this;
   $("body").removeClass("login-layout light-login");
   $("body").attr("class", "no-skin");
   _this.activeSidebar(_this.$route.name.replace("/", "-") + "-sidebar");
   //重新加载js
-  $.getScript('/ace/assets/js/ace.min.js');
+  $.getScript("/ace/assets/js/ace.min.js");
+  //获取登录带来的用户信息
+  _this.loginUser = Tool.getLoginUser();
  },
  //监听
  watch: {

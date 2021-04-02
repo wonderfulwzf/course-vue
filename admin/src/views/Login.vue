@@ -122,6 +122,7 @@ export default {
       let resp = response.data;
       //保存成功
       if (resp.success) {
+       Tool.setLoginUser(resp.data)
        this.$router.push("/welcome");
       }else{
         ToastMax.error(resp.message);
