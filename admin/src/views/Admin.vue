@@ -394,7 +394,7 @@
       <b class="arrow"></b>
      </li>
      <!-- 系统管理 -->
-     <li class="">
+     <li class="" v-show="hasResource('01')">
       <a href="#" class="dropdown-toggle">
        <i class="menu-icon fa fa-list"></i>
        <span class="menu-text"> 系统管理 </span>
@@ -414,7 +414,7 @@
         <b class="arrow"></b>
        </li>
 
-       <li class="" id="system-user-sidebar">
+       <li class="" id="system-user-sidebar" v-show="hasResource('0101')">
         <!-- 跳转 -->
         <router-link to="/system/user">
          <i class="menu-icon fa fa-caret-right"></i>
@@ -423,7 +423,7 @@
         <b class="arrow"></b>
        </li>
 
-       <li class="" id="system-resource-sidebar">
+       <li class="" id="system-resource-sidebar" v-show="hasResource('0102')">
         <!-- 跳转 -->
         <router-link to="/system/resource">
          <i class="menu-icon fa fa-caret-right"></i>
@@ -432,7 +432,7 @@
         <b class="arrow"></b>
        </li>
 
-       <li class="" id="system-role-sidebar">
+       <li class="" id="system-role-sidebar" v-show="hasResource('0103')">
         <!-- 跳转 -->
         <router-link to="/system/role">
          <i class="menu-icon fa fa-caret-right"></i>
@@ -649,6 +649,9 @@ export default {
      }
     );
   },
+  hasResource(id){
+    return Tool.hasResource(id);
+  }
  },
 };
 </script>
