@@ -622,7 +622,7 @@ export default {
    let _this = this;
    _this.$ajax
     .get(
-     process.env.VUE_APP_SERVER + "/system/admin/user/login_out")
+     process.env.VUE_APP_SERVER + "/system/admin/user/login_out/"+_this.loginUser.token)
     .then(
      //响应结果
      (response) => {
