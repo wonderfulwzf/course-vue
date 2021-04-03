@@ -329,7 +329,7 @@
         />
         <span class="user-info">
          <small>Welcome</small>
-         {{loginUser.loginName}}
+         {{ loginUser.loginName }}
         </span>
 
         <i class="ace-icon fa fa-caret-down"></i>
@@ -389,7 +389,7 @@
       <!-- 跳转 -->
       <router-link to="/welcome">
        <i class="menu-icon fa fa-tachometer"></i>
-       <span class="menu-text">欢 迎:{{loginUser.name}}</span>
+       <span class="menu-text">欢 迎:{{ loginUser.name }}</span>
       </router-link>
       <b class="arrow"></b>
      </li>
@@ -423,12 +423,21 @@
         <b class="arrow"></b>
        </li>
 
-       <li class="">
-        <a href="jqgrid.html">
+       <li class="" id="system-resource-sidebar">
+        <!-- 跳转 -->
+        <router-link to="/system/resource">
          <i class="menu-icon fa fa-caret-right"></i>
-         权限管理
-        </a>
+         资源管理
+        </router-link>
+        <b class="arrow"></b>
+       </li>
 
+       <li class="" id="system-role-sidebar">
+        <!-- 跳转 -->
+        <router-link to="/system/role">
+         <i class="menu-icon fa fa-caret-right"></i>
+         角色管理
+        </router-link>
         <b class="arrow"></b>
        </li>
       </ul>
@@ -618,21 +627,24 @@ export default {
    }
   },
   //退出登录
-   loginout() {
+  loginout() {
    let _this = this;
    _this.$ajax
     .get(
-     process.env.VUE_APP_SERVER + "/system/admin/user/login_out/"+_this.loginUser.token)
+     process.env.VUE_APP_SERVER +
+      "/system/admin/user/login_out/" +
+      _this.loginUser.token
+    )
     .then(
      //响应结果
      (response) => {
       let resp = response.data;
       //保存成功
       if (resp.success) {
-       Tool.setLoginUser(null)
+       Tool.setLoginUser(null);
        this.$router.push("/login");
-      }else{
-        ToastMax.error(resp.message);
+      } else {
+       ToastMax.error(resp.message);
       }
      }
     );

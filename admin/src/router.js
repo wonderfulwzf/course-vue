@@ -10,6 +10,8 @@ import Category from "./views/admin/Category.vue";
 import Teacher from "./views/admin/Teacher.vue";
 import File from "./views/admin/File.vue";
 import User from "./views/admin/User.vue";
+import Resource from "./views/admin/Resource.vue";
+import Role from "./views/admin/Role.vue";
 
 Vue.use(Router);
 export default new Router({
@@ -67,6 +69,14 @@ export default new Router({
         name: "system/user",
         path: "system/user",
         component: User,
+      },{
+        name: "system/resource",
+        path: "system/resource",
+        component: Resource,
+      },{
+        name: "system/role",
+        path: "system/role",
+        component: Role,
       }]
     }
   ],
