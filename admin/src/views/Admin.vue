@@ -593,12 +593,19 @@ export default {
   $.getScript("/ace/assets/js/ace.min.js");
   //获取登录带来的用户信息
   _this.loginUser = Tool.getLoginUser();
+
+  if (!_this.hasResourceRouter(_this.$route.name)) {
+   _this.$router.push("/login");
+  }
  },
  //监听
  watch: {
   $route: {
    handler: function () {
     let _this = this;
+    if (!_this.hasResourceRouter(_this.$route.name)) {
+     _this.$router.push("/login");
+    }
     _this.$nextTick(function () {
      _this.activeSidebar(_this.$route.name.replace("/", "-") + "-sidebar");
     });
@@ -649,9 +656,26 @@ export default {
      }
     );
   },
-  hasResource(id){
-    return Tool.hasResource(id);
-  }
+  /**
+   * 查找是否有权限
+   * @param id 资源id
+   */
+  hasResourceRouter(router) {
+   //let _this = this;
+   let resources = Tool.getLoginUser().resources;
+   if (Tool.isEmpty(resources)) {
+    return false;
+   }
+   for (let i = 0; i < resources.length; i++) {
+    if (router === resources[i].page) {
+     return true;
+    }
+   }
+   return false;
+  },
+  hasResource(id) {
+   return Tool.hasResource(id);
+  },
  },
 };
 </script>
