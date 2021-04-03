@@ -378,7 +378,7 @@ export default {
      _this.resources = response.data;
      // 初始化树
      _this.initTree();
-     //_this.listRoleResource();
+     _this.listRoleResource();
     });
   },
 
@@ -403,6 +403,58 @@ export default {
 
    _this.zTree = $.fn.zTree.init($("#tree"), setting, _this.resources);
    _this.zTree.expandAll(true);
+  },
+
+  /**
+   * 资源模态框点击【保存】
+   */
+  saveResource() {
+   let _this = this;
+   let resources = _this.zTree.getCheckedNodes();
+   console.log("勾选的资源：", resources);
+
+   // 保存时，只需要保存资源id，所以使用id数组进行参数传递
+   let resourceIds = [];
+   for (let i = 0; i < resources.length; i++) {
+    resourceIds.push(resources[i].id);
+   }
+   _this.$ajax
+    .post(process.env.VUE_APP_SERVER + "/system/admin/role/save_resource", {
+     id: _this.role.id,
+     resourceIds: resourceIds,
+    })
+    .then((response) => {
+     let resp = response.data;
+     if (resp.success) {
+      ToastMin.success("保存成功!");
+      $("#resource-modal").modal("hide");
+     } else {
+      ToastMax.warning(resp.message);
+     }
+    });
+  },
+  /**
+   * 加载角色资源关联记录
+   */
+  listRoleResource() {
+   let _this = this;
+   _this.$ajax
+    .get(
+     process.env.VUE_APP_SERVER +
+      "/system/admin/role/list_resource/" +
+      _this.role.id
+    )
+    .then((response) => {
+     let resp = response.data;
+     let resources = resp.data;
+
+     // 勾选查询到的资源：先把树的所有节点清空勾选，再勾选查询到的节点
+     _this.zTree.checkAllNodes(false);
+     for (let i = 0; i < resources.length; i++) {
+      let node = _this.zTree.getNodeByParam("id", resources[i]);
+      _this.zTree.checkNode(node, true);
+     }
+    });
   },
  },
 };
