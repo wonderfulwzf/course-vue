@@ -118,6 +118,7 @@ export default {
   return {
    user: {},
    remember: true,
+   imageCodeToken: "",
   };
  },
  mounted: function () {
@@ -140,6 +141,7 @@ export default {
     //对密码进行加密
     _this.user.password = hex_md5(_this.user.password + KEY);
    }
+   _this.user.imageCodeToken = _this.imageCodeToken;
    _this.$ajax
     .post(
      process.env.VUE_APP_SERVER + "/system/admin/user/login",
@@ -167,6 +169,9 @@ export default {
        this.$router.push("/welcome");
       } else {
        ToastMax.error(resp.message);
+       _this.user.password = "";
+       _this.loadImageCode();
+       _this.user.imageCode = "";
       }
      }
     );
@@ -189,7 +194,7 @@ export default {
 </script>
 
 <style scoped>
-  .input-group-addon {
-    padding: 0;
-  }
+.input-group-addon {
+ padding: 0;
+}
 </style>

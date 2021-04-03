@@ -8,6 +8,8 @@ Vue.config.productionTip = false;
 //设置vue的全局变量
 Vue.prototype.$ajax = axios;
 
+//解决session不一致问题
+axios.defaults.withCredentials = true;
 
 /**
  * axios拦截器
